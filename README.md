@@ -34,6 +34,6 @@ Some features are:
 * Autodetect GoPro WiFi password.
 * Unit tests.  
 
-## Thangs to:
+## Thanks to:
 * @KonradIT for the great GoPro WiFi documentation at https://github.com/KonradIT/goprowifihack
 * @JMB-Technology-Limited for the shake detector code: https://github.com/JMB-Technology-Limited/Shoogle-For-Yer-Photos-Android/blob/master/app/src/uk/co/jarofgreen/lib/ShakeDetectActivity.java
