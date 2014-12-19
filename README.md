@@ -15,18 +15,19 @@ Some features are:
 * Power off/on camera.
 
 ## Screenshots
-* Phone App
-* Wear Main Activity
-* Video Resolution selector.
-* Time Lapse interval selector.
-* Image Gallery.
-* Options.
+* Phone App -> http://goo.gl/q3f051
+* Wear Main Activity -> http://goo.gl/A4uJJg - http://goo.gl/TQjm7q
+* Camera Mode selector -> http://goo.gl/4DA2wK
+* Video Resolution selector -> http://goo.gl/1hJ6pd
+* Time Lapse interval selector -> http://goo.gl/ualtLs
+* Settings -> http://goo.gl/1IQ4TI
+* Image Gallery -> http://goo.gl/y1I0XM
 
 ## Things to do
 * Make compatible with all GoPro models (currently tested on Hero3 White only).
 * Live preview on watch (Nice to have but not essential).
 * Improve UI design.
 * Test on round watches.
-* Change icons.
+* New icons.
 * Code documentation.
 * Unit tests.  
