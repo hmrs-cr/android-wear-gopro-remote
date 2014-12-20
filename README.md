@@ -22,6 +22,8 @@ Some features are:
 * Time Lapse interval selector -> http://goo.gl/ualtLs
 * Settings -> http://goo.gl/1IQ4TI
 * Image Gallery -> http://goo.gl/y1I0XM
+* 
+[![Video showing it in action](http://img.youtube.com/vi/ek_dwJQX3Wc/0.jpg)](http://www.youtube.com/watch?v=ek_dwJQX3Wc)
 
 ## Things to do
 * Make compatible with all GoPro models (currently tested on Hero3 White only).
