@@ -177,11 +177,11 @@ public class ShakeDetectEventListener implements SensorEventListener {
     public void addListener(ShakeDetectActivityListener listener) {
         listeners.add(listener);
     }
-	
-	public void clear() {
-		listeners.clear();
-		dataPoints.clear();
-	}
+
+    public void clear() {
+        listeners.clear();
+        dataPoints.clear();
+    }
 
     protected void triggerShakeDetected() {
         for(ShakeDetectActivityListener listener: listeners) {

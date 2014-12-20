@@ -52,7 +52,7 @@ public class ImageViewerActivity extends Activity implements View.OnClickListene
         View.OnLongClickListener, GridViewPager.OnPageChangeListener {
 
     public static final String EXTRA_THUMBNAIL = BuildConfig.APPLICATION_ID + ".EXTRA_THUMBNAIL";
-	public static final String EXTRA_THUMB_FILENAME = BuildConfig.APPLICATION_ID + ".EXTRA_THUMB_FILENAME";
+    public static final String EXTRA_THUMB_FILENAME = BuildConfig.APPLICATION_ID + ".EXTRA_THUMB_FILENAME";
     public static final String REFRESH_FILE_LIST = BuildConfig.APPLICATION_ID + ".REFRESH_FILE_LIST";
     private static final String TAG = "ImageViewerActivity";
 
@@ -63,7 +63,7 @@ public class ImageViewerActivity extends Activity implements View.OnClickListene
     public static void showImage(Context context, String thumbFileName, byte[] thumb) {
         Intent i = new Intent(context, ImageViewerActivity.class);
         if(thumb != null) i.putExtra(EXTRA_THUMBNAIL, thumb);
-		if(thumbFileName != null) i.putExtra(EXTRA_THUMB_FILENAME, thumbFileName);
+        if(thumbFileName != null) i.putExtra(EXTRA_THUMB_FILENAME, thumbFileName);
         context.startActivity(i);
     }
 
@@ -91,7 +91,7 @@ public class ImageViewerActivity extends Activity implements View.OnClickListene
     }
 
     void loadImagesAdapter(Bitmap image, int imageIndex) {
-		mPager.setAdapter(new Adapter(this, image, imageIndex));
+        mPager.setAdapter(new Adapter(this, image, imageIndex));
         onPageSelected(0, 0);
      }
 
@@ -106,27 +106,27 @@ public class ImageViewerActivity extends Activity implements View.OnClickListene
 
             byte[] thumb = i.getByteArrayExtra(EXTRA_THUMBNAIL);
             if(thumb != null && thumb.length > 0) {                
-				final Bitmap bitmap = BitmapFactory.decodeByteArray(thumb, 0, thumb.length);
-				String imageFileName = i.getStringExtra(EXTRA_THUMB_FILENAME);
-				if(!TextUtils.isEmpty(imageFileName)) {
-					File imageFile = new File(imageFileName);
-					ThumbCache.saveThumbToMemCache(bitmap, imageFile);
-					ThumbCache.addToThumbFileList(this, imageFile);
-				}
-				if(animate) {
+                final Bitmap bitmap = BitmapFactory.decodeByteArray(thumb, 0, thumb.length);
+                String imageFileName = i.getStringExtra(EXTRA_THUMB_FILENAME);
+                if(!TextUtils.isEmpty(imageFileName)) {
+                    File imageFile = new File(imageFileName);
+                    ThumbCache.saveThumbToMemCache(bitmap, imageFile);
+                    ThumbCache.addToThumbFileList(this, imageFile);
+                }
+                if(animate) {
                     mImageViewAnim.setImageBitmap(bitmap);
                     mImageViewAnim.setTranslationX(mPager.getWidth());
                     mImageViewAnim.setRotation(40);
                     mImageViewAnim.setVisibility(View.VISIBLE);
                     mImageViewAnim.animate().setDuration(400).translationX(0).rotation(0).withEndAction(new Runnable() {
                         public void run() {
-							loadImagesAdapter(bitmap, 0);
+                            loadImagesAdapter(bitmap, 0);
                             mImageViewAnim.setVisibility(View.GONE);
                         }
                     });
                 } else {
-					loadImagesAdapter(bitmap, 0);
-				}
+                    loadImagesAdapter(bitmap, 0);
+                }
                 return;
             }
         }
@@ -231,13 +231,13 @@ public class ImageViewerActivity extends Activity implements View.OnClickListene
 
         private static final String TAG = "ImageViewerActivity";
         private final Context mContext;
-		private final Bitmap mFirstImage;
+        private final Bitmap mFirstImage;
         private final int mFirstIndex;
         private final List<File> mFileList;
         private final int mCount;
 
         public Adapter(Context context, Bitmap firstImage, int firstIndex) {
-			mFirstImage = firstImage;
+            mFirstImage = firstImage;
             mFirstIndex = firstIndex;
             mContext = context;
             mFileList = ThumbCache.getThumbFileList(context);
@@ -348,18 +348,18 @@ public class ImageViewerActivity extends Activity implements View.OnClickListene
             @Override
             protected Bitmap doInBackground(Void... params) {
                 try {
-					int l = (int)mImageFile.length();
-					if(l <= 0) return null;
-					
-					int r;
-					byte[] buffer = new byte[l];
+                    int l = (int)mImageFile.length();
+                    if(l <= 0) return null;
+
+                    int r;
+                    byte[] buffer = new byte[l];
                     try (FileInputStream is = new FileInputStream(mImageFile)) {
                         r = is.read(buffer);
                     }
-					
-					if(r <= 0) return null;
+
+                    if(r <= 0) return null;
                     return BitmapFactory.decodeByteArray(buffer, 0, r);
-					
+
                 } catch (IOException e) {
                     Logger.error(TAG, "Load thumb from disk failed.", e);
                 }
@@ -369,9 +369,9 @@ public class ImageViewerActivity extends Activity implements View.OnClickListene
             @Override
             protected void onPostExecute(Bitmap bitmap) {
                 if(bitmap != null) {
-					ThumbCache.saveThumbToMemCache(bitmap, mImageFile);
+                    ThumbCache.saveThumbToMemCache(bitmap, mImageFile);
                     if(mImageView != null) mImageView.setImageBitmap(bitmap);
-					if(Logger.DEBUG) Logger.debug(TAG, "Loaded thumb %s from disk.", mImageFile);
+                    if(Logger.DEBUG) Logger.debug(TAG, "Loaded thumb %s from disk.", mImageFile);
                 }
             }
         }

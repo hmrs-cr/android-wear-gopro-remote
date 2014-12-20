@@ -20,51 +20,51 @@ import com.hmsoft.libcommon.BuildConfig;
 
 public class CrashCatcher implements Thread.UncaughtExceptionHandler {
 
-	private Thread.UncaughtExceptionHandler oldHandler;
+    private Thread.UncaughtExceptionHandler oldHandler;
 
-	private CrashCatcher() {
-		if (BuildConfig.DEBUG) {
-			oldHandler = Thread.getDefaultUncaughtExceptionHandler();						
-			Thread.setDefaultUncaughtExceptionHandler(this);
-		}
-	}
+    private CrashCatcher() {
+        if (BuildConfig.DEBUG) {
+            oldHandler = Thread.getDefaultUncaughtExceptionHandler();
+            Thread.setDefaultUncaughtExceptionHandler(this);
+        }
+    }
 
     public static void init() {
         if (BuildConfig.DEBUG) {
             new CrashCatcher();
         }
     }
-	
-	@Override
-	public void uncaughtException(Thread thread, Throwable ex) {
-		try {
-			StackTraceElement[] arr = ex.getStackTrace();
 
-			String report =	ex.toString() + "\n\n";
-			report += "--------- Stack trace ---------\n\n"; 
-			report += thread.toString() + "\n\n";
+    @Override
+    public void uncaughtException(Thread thread, Throwable ex) {
+        try {
+            StackTraceElement[] arr = ex.getStackTrace();
+
+            String report =	ex.toString() + "\n\n";
+            report += "--------- Stack trace ---------\n\n";
+            report += thread.toString() + "\n\n";
             for (StackTraceElement anArr : arr) {
                 report += "    " + anArr.toString() + "\n";
             }
-			report += "-------------------------------\n\n";
+            report += "-------------------------------\n\n";
 
-			report += "--------- Cause ---------\n\n";
-			Throwable cause = ex.getCause();
-			if(cause != null) {
-				report += cause.toString() + "\n\n";
-				arr = cause.getStackTrace();
+            report += "--------- Cause ---------\n\n";
+            Throwable cause = ex.getCause();
+            if(cause != null) {
+                report += cause.toString() + "\n\n";
+                arr = cause.getStackTrace();
                 for (StackTraceElement anArr : arr) {
                     report += "    " + anArr.toString() + "\n";
                 }
-			}
-			report += "-------------------------------\n\n";
+            }
+            report += "-------------------------------\n\n";
 
             Logger.error("FATAL_EXCEPTION", report);
 
-		} catch (Exception e) {
+        } catch (Exception e) {
             // Ignore
-		}
-		
-		if (oldHandler != null)	oldHandler.uncaughtException(thread, ex);
-	}
+        }
+
+        if (oldHandler != null)	oldHandler.uncaughtException(thread, ex);
+    }
 }

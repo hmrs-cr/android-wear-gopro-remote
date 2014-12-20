@@ -71,17 +71,17 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
     private static final int REQUEST_CODE_VIDEO_MODE = 2;
     private static final int REQUEST_CODE_TIMELAPSE_INTERVAL = 3;
 
-	private boolean mDontSendDisconnect = false;
+    private boolean mDontSendDisconnect = false;
     RelativeLayout mLayoutControls;
     FrameLayout mLayoutStatus;
     WatchViewStub mWatchViewStub;
-	ImageButton mBtnCameraMode;
+    ImageButton mBtnCameraMode;
     ImageButton mBtnReconnect;
     Button mBtnVideoMode;
-	TextView mTxtBatteryLevel;
+    TextView mTxtBatteryLevel;
     ImageView mImgBatteryLevel;
-	Button mBtnShutter;
-	TextView mTxtStatus;
+    Button mBtnShutter;
+    TextView mTxtStatus;
     ShakeDetectEventListener mShakeDetectActivity;
     RelativeLayout mLoadingPanel;
     ProgressBar mProgressBarConnecting;
@@ -121,17 +121,17 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
                 mBtnCameraMode = (ImageButton)findViewById(R.id.btnCameraMode);
                 mBtnReconnect = (ImageButton)findViewById(R.id.btnReconnect);
                 mBtnVideoMode = (Button)findViewById(R.id.btnVideoMode);
-				mTxtBatteryLevel = (TextView)findViewById(R.id.txtBatteryLevel);
+                mTxtBatteryLevel = (TextView)findViewById(R.id.txtBatteryLevel);
                 mImgBatteryLevel = (ImageView)findViewById(R.id.imgBatteryLevel);
-				mBtnShutter = (Button)findViewById(R.id.btnShutter);
-				mTxtStatus = (TextView)findViewById(R.id.txtStatus);
+                mBtnShutter = (Button)findViewById(R.id.btnShutter);
+                mTxtStatus = (TextView)findViewById(R.id.txtStatus);
                 mLayoutControls = (RelativeLayout)findViewById(R.id.layoutControls);
                 mLayoutStatus = (FrameLayout)findViewById(R.id.layoutStatus);
                 mLoadingPanel = (RelativeLayout)findViewById(R.id.loadingPanel);
                 mProgressBarConnecting = (ProgressBar)findViewById(R.id.progressBarConnecting);
             }
         });
-		
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mSettings = new WearSettings();
         mSettings.loadFromPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
@@ -178,10 +178,10 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
         mGoogleApiClient.disconnect();
         if(mUpdateRecordingTimeTimer != null) mUpdateRecordingTimeTimer.stop();
         if(mReconnectTimer != null) mReconnectTimer.stop();
-		if(mShakeDetectActivity != null) mShakeDetectActivity.clear();
-		GoProStatus.LastCameraStatus = null;
-		ThumbCache.clear();
-		WearApplication app = (WearApplication)getApplication();
+        if(mShakeDetectActivity != null) mShakeDetectActivity.clear();
+        GoProStatus.LastCameraStatus = null;
+        ThumbCache.clear();
+        WearApplication app = (WearApplication)getApplication();
         if(app != null) {
             app.MessageSender = null;
         }
@@ -294,8 +294,8 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-		if(BuildConfig.DEBUG) Logger.debug(TAG, "onMessageReceived: " + messageEvent.getPath());
-		handleMessage(messageEvent.getPath(), messageEvent.getData());        
+        if(BuildConfig.DEBUG) Logger.debug(TAG, "onMessageReceived: " + messageEvent.getPath());
+        handleMessage(messageEvent.getPath(), messageEvent.getData());
     }   
 
     @Override
@@ -334,7 +334,7 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
         }
     }
 
-	private void handleMessage(String path, final byte[] data) {
+    private void handleMessage(String path, final byte[] data) {
 
         String message = WearMessages.getMessage(path);
         switch (message) {
@@ -404,7 +404,7 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
                 GoProController.saveThumbnailToCache(mThumbsCacheDirectory, thumbFileName, data);
                 break;
         }
-	}
+    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -447,7 +447,7 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
         return String.format("%02dH:%02d", hours, mins);
     }
 
-	private void updateStatusUi(final GoProStatus status) {
+    private void updateStatusUi(final GoProStatus status) {
 
         initShakeDetector(status);
 
@@ -634,7 +634,7 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
         return "";
     }
 
-	public void changeCameraMode(View view) {
+    public void changeCameraMode(View view) {
         if(getCurrentStatusValue(GoProStatus.Fields.IS_RECORDING_FIELD) == 1) {
             return;
         }

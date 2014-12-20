@@ -19,14 +19,14 @@ package com.hmsoft.libcommon.general;
 import android.app.Application;
 
 public class BaseApp extends Application {
-	
-	private static final String TAG = "BaseApp";
 
-	@Override 
-	public void onCreate() {
-		super.onCreate();
-	    CrashCatcher.init();
+    private static final String TAG = "BaseApp";
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        CrashCatcher.init();
         Logger.init(getApplicationContext());
-		if(Logger.DEBUG)  Logger.debug(TAG, "onCreate");
-	}
+        if(Logger.DEBUG)  Logger.debug(TAG, "onCreate");
+    }
 }

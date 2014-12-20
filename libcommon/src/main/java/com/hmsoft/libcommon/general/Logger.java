@@ -32,11 +32,11 @@ import android.util.Log;
 import com.hmsoft.libcommon.BuildConfig;
 
 public final class Logger {
-	
-	//private static final String TAG = "Logger";
+
+    //private static final String TAG = "Logger";
     private static final String APP_TAG = "HMSOFT:";
 
-	public static final boolean DEBUG = BuildConfig.DEBUG;
+    public static final boolean DEBUG = BuildConfig.DEBUG;
     public static final boolean WARNING = true;
     //public static final boolean INFO = true;
     public static final boolean ERROR = true;
@@ -46,11 +46,11 @@ public final class Logger {
     //public static  final String INFO_TAG = "INFO";
     public static  final String ERROR_TAG = "ERROR";
 
-	private static final String LOG_FILE = "log-%s.log";
-	private static final String LOGS_FOLDER = "logs";
-	
-	private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.US);
-	private static final SimpleDateFormat LOG_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd", Locale.US);
+    private static final String LOG_FILE = "log-%s.log";
+    private static final String LOGS_FOLDER = "logs";
+
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.US);
+    private static final SimpleDateFormat LOG_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd", Locale.US);
 
     private static File sLogsFolder = null;
 
@@ -58,19 +58,19 @@ public final class Logger {
         sLogsFolder = context.getExternalFilesDir(LOGS_FOLDER);
     }
 
-	public static void log2file(String tag, String msg, String fileName, Throwable e) {
-		
-		try {
-			if(sLogsFolder == null) {
+    public static void log2file(String tag, String msg, String fileName, Throwable e) {
+
+        try {
+            if(sLogsFolder == null) {
                 sLogsFolder = new File(Environment.getExternalStorageDirectory() +
                         "/Android/data/" + BuildConfig.APPLICATION_ID, LOGS_FOLDER);
-			}
+            }
 
-			Date now = new Date();
-			
-			File file = new File(sLogsFolder, String.format(fileName, LOG_DATE_FORMAT.format(now)));
-			
-			FileOutputStream os = new FileOutputStream(file, true);
+            Date now = new Date();
+
+            File file = new File(sLogsFolder, String.format(fileName, LOG_DATE_FORMAT.format(now)));
+
+            FileOutputStream os = new FileOutputStream(file, true);
             try (OutputStreamWriter writer = new OutputStreamWriter(os)) {
                 writer.append(SIMPLE_DATE_FORMAT.format(now));
                 writer.append("\t");
@@ -83,32 +83,32 @@ public final class Logger {
                 writer.append("\n");
                 writer.flush();
             }
-		} catch (IOException ex) {
-			//Log.w(TAG, "log2file failed:", ex);
-		}
-	}
-	
-	public static void debug(String tag, String msg) {
-		if(DEBUG) {
-			Log.d(APP_TAG + tag, msg);
-			log2file(tag + "\t" + DEBUG_TAG, msg, LOG_FILE, null);
-		}
-	}
-	
-	public static void debug(String tag, String msg, Throwable e) {
-		if(DEBUG) {
+        } catch (IOException ex) {
+            //Log.w(TAG, "log2file failed:", ex);
+        }
+    }
+
+    public static void debug(String tag, String msg) {
+        if(DEBUG) {
+            Log.d(APP_TAG + tag, msg);
+            log2file(tag + "\t" + DEBUG_TAG, msg, LOG_FILE, null);
+        }
+    }
+
+    public static void debug(String tag, String msg, Throwable e) {
+        if(DEBUG) {
             Log.d(APP_TAG + tag, msg, e);
-			log2file(tag + "\t" + DEBUG_TAG, msg, LOG_FILE, e);
-		}
-	}
-	
-	public static void debug(String tag, String msg, Object... args) {
-		if(DEBUG) {
-			msg = String.format(msg,  args);
+            log2file(tag + "\t" + DEBUG_TAG, msg, LOG_FILE, e);
+        }
+    }
+
+    public static void debug(String tag, String msg, Object... args) {
+        if(DEBUG) {
+            msg = String.format(msg,  args);
             Log.d(APP_TAG + tag, String.format(msg,  args));
-			log2file(tag + "\t" + DEBUG_TAG, msg, LOG_FILE, null);
-		}
-	}
+            log2file(tag + "\t" + DEBUG_TAG, msg, LOG_FILE, null);
+        }
+    }
 
     public static void error(String tag, String msg) {
         if(ERROR) {
@@ -117,12 +117,12 @@ public final class Logger {
         }
     }
 
-	public static void error(String tag, String msg, Throwable e) {
-		if(ERROR) {
-			Log.e(tag, msg, e);
-			log2file(tag + "\t" + ERROR_TAG, msg, LOG_FILE, e);
-		}
-	}
+    public static void error(String tag, String msg, Throwable e) {
+        if(ERROR) {
+            Log.e(tag, msg, e);
+            log2file(tag + "\t" + ERROR_TAG, msg, LOG_FILE, e);
+        }
+    }
 //
 //	public static void error(String tag, String msg, Object... args) {
 //		if(ERROR) {

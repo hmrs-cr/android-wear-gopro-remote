@@ -48,8 +48,8 @@ public class GoProController {
     private static final boolean DEBUG = Logger.DEBUG;
 
     private static volatile GoProController sDefaultInstance = null;
-	
-	private static final byte[] RESPONSE_NOT_FOUND = new byte[0];
+
+    private static final byte[] RESPONSE_NOT_FOUND = new byte[0];
 
     private final String fCameraAddress;
     private final String fPassword;    
@@ -62,22 +62,22 @@ public class GoProController {
     public GoProController(String password) {
         this(DEFAULT_GOPROADDRESS, password);
     }
-	
-	public static GoProController getDefaultInstance(String pass) {
-		if(sDefaultInstance == null || !sDefaultInstance.fPassword.equals(pass)) {
-			sDefaultInstance = new GoProController(pass);
-		}
-		return sDefaultInstance;
-	}
 
-	public static void clear() {
-		sDefaultInstance = null;
-		GoProStatus.LastCameraStatus = null;
-	}
-	
-	private static boolean responseOk(byte[] response) {
-		return response != null && response != RESPONSE_NOT_FOUND;
-	}
+    public static GoProController getDefaultInstance(String pass) {
+        if(sDefaultInstance == null || !sDefaultInstance.fPassword.equals(pass)) {
+            sDefaultInstance = new GoProController(pass);
+        }
+        return sDefaultInstance;
+    }
+
+    public static void clear() {
+        sDefaultInstance = null;
+        GoProStatus.LastCameraStatus = null;
+    }
+
+    private static boolean responseOk(byte[] response) {
+        return response != null && response != RESPONSE_NOT_FOUND;
+    }
 
     private HttpURLConnection getHttpURLConnection(String urlStr) {
         URL url;
@@ -149,27 +149,27 @@ public class GoProController {
 
     public GoProStatus getStatus() {
         byte[] response = getRawStatus();
-		GoProStatus.LastCameraStatus = response;
+        GoProStatus.LastCameraStatus = response;
         return new GoProStatus(response);
     }
 
     public byte[] getRawStatus() {
         byte[] response = execCameraCommand("se", null);
-		if(response == RESPONSE_NOT_FOUND) {
-			response = new byte[GoProStatus.RAW_STATUS_LEN];
-			Arrays.fill(response, GoProStatus.UNKNOW);
+        if(response == RESPONSE_NOT_FOUND) {
+            response = new byte[GoProStatus.RAW_STATUS_LEN];
+            Arrays.fill(response, GoProStatus.UNKNOW);
             response[GoProStatus.Fields.CAMERA_MODE_FIELD] = GoProStatus.CAMERA_MODE_OFF_WIFION;
-		}
-		GoProStatus.LastCameraStatus = response;
+        }
+        GoProStatus.LastCameraStatus = response;
         return response;
     }
-	
-	public byte[] getLastStatus() {
-		if(GoProStatus.LastCameraStatus == null) {
-			GoProStatus.LastCameraStatus = getRawStatus();
-		}
-		return GoProStatus.LastCameraStatus;
-	}
+
+    public byte[] getLastStatus() {
+        if(GoProStatus.LastCameraStatus == null) {
+            GoProStatus.LastCameraStatus = getRawStatus();
+        }
+        return GoProStatus.LastCameraStatus;
+    }
 
     public String getCameraName() {
         byte[] response = execCameraCommand("cv", null);
@@ -178,11 +178,11 @@ public class GoProController {
         }
         return null;
     }
-	
-	public byte[] getRawCameraName() {
+
+    public byte[] getRawCameraName() {
         byte[] response = execCameraCommand("cv", null);
-		if(response == RESPONSE_NOT_FOUND) response = null;
-		return response;
+        if(response == RESPONSE_NOT_FOUND) response = null;
+        return response;
     }
 
     public boolean shutter(boolean on) {
@@ -258,11 +258,11 @@ public class GoProController {
         return responseOk(response);
     }
 
-	// **************************************************************** //
-	// ************************** Media ******************************* //
-	// **************************************************************** //
-	
-	private File mThumbnailCacheDirectory;
+    // **************************************************************** //
+    // ************************** Media ******************************* //
+    // **************************************************************** //
+
+    private File mThumbnailCacheDirectory;
     private JSONArray mLastMediaList;
 
     private JSONArray getMediaJSONList() {
@@ -297,41 +297,41 @@ public class GoProController {
     }
 
     public String getMediaFileNameAtReverseIndex(int index) {
-		if(mLastMediaList == null) {
-			if((mLastMediaList = getMediaJSONList()) == null) {
-				return "";
-			}
-		}
+        if(mLastMediaList == null) {
+            if((mLastMediaList = getMediaJSONList()) == null) {
+                return "";
+            }
+        }
         try {
-			int len = mLastMediaList.length();
+            int len = mLastMediaList.length();
         
-			for(int c = 1; c <= len; c++) {
-				JSONObject folder = mLastMediaList.getJSONObject(len - c);
-				JSONArray entries = folder.getJSONArray("fs");
-					
-				int entLen = entries.length();
-				if(entLen <= 0) continue;
-					
-				if(index > entLen) {
-					index -= entLen;
-					continue;
-				}
+            for(int c = 1; c <= len; c++) {
+                JSONObject folder = mLastMediaList.getJSONObject(len - c);
+                JSONArray entries = folder.getJSONArray("fs");
+
+                int entLen = entries.length();
+                if(entLen <= 0) continue;
+
+                if(index > entLen) {
+                    index -= entLen;
+                    continue;
+                }
 
                 if(index <= 0) index = 1;
                 else if(index > entLen) return "";
 
-				String folderName = folder.optString("d");
-				JSONObject image = entries.getJSONObject(entLen - index);
-				String imageName = image.getString("n");
-				return "/" + folderName + "/" + imageName;
-			}
+                String folderName = folder.optString("d");
+                JSONObject image = entries.getJSONObject(entLen - index);
+                String imageName = image.getString("n");
+                return "/" + folderName + "/" + imageName;
+            }
         } catch (JSONException e) {
-        	Logger.error(TAG, "", e);
+            Logger.error(TAG, "", e);
         }        
         return "";
     }    
-		
-	public static void saveThumbnailToCache(File thumbnailCacheDirectory, String fileName,
+
+    public static void saveThumbnailToCache(File thumbnailCacheDirectory, String fileName,
                                             byte[] thumb) {
         if(thumbnailCacheDirectory != null) {
             File cacheFile = new File(thumbnailCacheDirectory, fileName);
@@ -360,7 +360,7 @@ public class GoProController {
         File cacheFile = new File(thumbnailCacheDirectory, fileName);
         if(!cacheFile.exists()) return null;
         try {
-			byte[] buffer = new byte[(int)cacheFile.length()];
+            byte[] buffer = new byte[(int)cacheFile.length()];
             try (FileInputStream is = new FileInputStream(cacheFile)) {
                 is.read(buffer);
             }
@@ -418,12 +418,12 @@ public class GoProController {
         return null;
     }
 
-	public Thumbnail getImgThumbnailAtReverseIndex(int index) {
-		String mediaFileName = getMediaFileNameAtReverseIndex(index);
-		if(TextUtils.isEmpty(mediaFileName)) return null;
+    public Thumbnail getImgThumbnailAtReverseIndex(int index) {
+        String mediaFileName = getMediaFileNameAtReverseIndex(index);
+        if(TextUtils.isEmpty(mediaFileName)) return null;
         byte[] bitmapData = getImgThumbnail(mediaFileName);
         return new Thumbnail(mediaFileName, bitmapData);
-	}
+    }
 
     public void refreshMediaCachedList() {
         mLastMediaList = null; // Force refresh
@@ -431,7 +431,7 @@ public class GoProController {
 
     public Thumbnail getLastImgThumbnail() {
         refreshMediaCachedList();
-		return getImgThumbnailAtReverseIndex(1);
+        return getImgThumbnailAtReverseIndex(1);
     }
 
     public static class Thumbnail {

@@ -30,7 +30,7 @@ public class WearSettings {
 
     public final byte[] rawData;
 
-    public WearSettings() {
+  public WearSettings() {
         rawData = new byte[RAW_DATA_LEN];
     }
 

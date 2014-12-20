@@ -28,7 +28,7 @@ import com.hmsoft.weargoproremote.BuildConfig;
 public class MobileDataLayerListenerService extends WearableListenerService  {
 
     private static final String TAG = "MobileDataLayerListenerService";
-	
+
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if(BuildConfig.DEBUG) Logger.debug(TAG, "Message received: %s", messageEvent.getPath());

@@ -47,8 +47,6 @@ import com.hmsoft.weargoproremote.BuildConfig;
 import com.hmsoft.weargoproremote.R;
 import com.hmsoft.weargoproremote.helpers.WifiHelper;
 
-import java.io.File;
-
 public class MobileMainActivity extends PreferenceActivity implements
         Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener,
         ShakeDetectEventListener.ShakeDetectActivityListener,
@@ -76,12 +74,12 @@ public class MobileMainActivity extends PreferenceActivity implements
         version.setTitle(BuildConfig.VERSION_NAME);
         version.setSummary(BuildConfig.FLAVOR + " " + BuildConfig.BUILD_TYPE);
     }
-			
-	@Override
+
+    @Override
     protected void onDestroy() {
-		if(mShakeDetectActivity != null) mShakeDetectActivity.clear();
+        if(mShakeDetectActivity != null) mShakeDetectActivity.clear();
         super.onDestroy();
-	}
+    }
 
     @Override
     protected void onPause() {

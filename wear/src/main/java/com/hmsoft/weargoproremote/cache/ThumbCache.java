@@ -54,8 +54,8 @@ public final class ThumbCache {
             sMemoryCache.evictAll();
             sMemoryCache = null;
         }
-		sThumbFileList = null;
-		sThumbCacheFolderFile = null;
+        sThumbFileList = null;
+        sThumbCacheFolderFile = null;
     }
 
     public static void clearThumbFileList() {

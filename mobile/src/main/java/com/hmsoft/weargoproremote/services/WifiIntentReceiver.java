@@ -35,12 +35,12 @@ public class WifiIntentReceiver extends BroadcastReceiver {
     private static final String TAG = "WifiIntentReceiver";
 
     @Override
-	public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent intent) {
 
-		final String action = intent.getAction();
+        final String action = intent.getAction();
         if(BuildConfig.DEBUG) Logger.debug(TAG, "onReceive:" + action);
 
-		if (WifiManager.SUPPLICANT_STATE_CHANGED_ACTION .equals(action)) {
+        if (WifiManager.SUPPLICANT_STATE_CHANGED_ACTION .equals(action)) {
             SupplicantState state = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE);
             if(state == SupplicantState.COMPLETED) {
                 final WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
@@ -59,6 +59,6 @@ public class WifiIntentReceiver extends BroadcastReceiver {
                     }
                 }
             }
-		}
-	}
+        }
+    }
 }

@@ -17,7 +17,7 @@
 package com.hmsoft.libcommon.gopro;
 
 public class GoProStatus {
-		
+
     public static final byte UNKNOW = -1;
     public static final byte OK = 1;
 
@@ -73,32 +73,32 @@ public class GoProStatus {
     public static final byte LEDS_4 = 2;
 
     public static class Fields {
-		public static final int CAMERA_MODE_FIELD = 1;
-		public static final int STARTUP_MODE_FIELD = 3;
-		public static final int SPOT_METER_FIELD = 4;
-		public static final int TIMELAPSE_INTERVAL_FIELD = 5;
-		public static final int AUTIMATIC_POWEROFF_FIELD = 6;
-		public static final int VIEW_ANGLE_FIELD = 7;
-		public static final int PHOTO_MODE_FIELD = 8;
-		public static final int VIDEO_MODE_FIELD = 9;
-		public static final int RECORDING_MINUTES_FIELD = 13;
-		public static final int RECORDING_SECONDS_FIELD = 14;
-		public static final int BEEP_VOLUME_FIELD = 16;
-		public static final int LEDS_FIELD = 17;
+        public static final int CAMERA_MODE_FIELD = 1;
+        public static final int STARTUP_MODE_FIELD = 3;
+        public static final int SPOT_METER_FIELD = 4;
+        public static final int TIMELAPSE_INTERVAL_FIELD = 5;
+        public static final int AUTIMATIC_POWEROFF_FIELD = 6;
+        public static final int VIEW_ANGLE_FIELD = 7;
+        public static final int PHOTO_MODE_FIELD = 8;
+        public static final int VIDEO_MODE_FIELD = 9;
+        public static final int RECORDING_MINUTES_FIELD = 13;
+        public static final int RECORDING_SECONDS_FIELD = 14;
+        public static final int BEEP_VOLUME_FIELD = 16;
+        public static final int LEDS_FIELD = 17;
         public static final int BOOLEAN_STATUS_FIELD = 18;
-		public static final int BATTERY_LEVEL_FIELD = 19;
-		public static final int PHOTOS_AVAILABLE_LO_FIELD = 21;
-		public static final int PHOTOS_AVAILABLE_HI_FIELD = 22;
-		public static final int PHOTOS_COUNT_LO_FIELD = 23;
-		public static final int PHOTOS_COUNT_HI_FIELD = 24;
-		public static final int VIDEO_REMAINING_MINS_LO_FIELD = 25;
-		public static final int VIDEO_REMAINING_MINS_HI_FIELD = 26;
-		public static final int VIDEO_COUNT_MINS_LO_FIELD = 27;
-		public static final int VIDEO_COUNT_MINS_HI_FIELD = 28;
-		public static final int IS_RECORDING_FIELD = 29;
-	}
+        public static final int BATTERY_LEVEL_FIELD = 19;
+        public static final int PHOTOS_AVAILABLE_LO_FIELD = 21;
+        public static final int PHOTOS_AVAILABLE_HI_FIELD = 22;
+        public static final int PHOTOS_COUNT_LO_FIELD = 23;
+        public static final int PHOTOS_COUNT_HI_FIELD = 24;
+        public static final int VIDEO_REMAINING_MINS_LO_FIELD = 25;
+        public static final int VIDEO_REMAINING_MINS_HI_FIELD = 26;
+        public static final int VIDEO_COUNT_MINS_LO_FIELD = 27;
+        public static final int VIDEO_COUNT_MINS_HI_FIELD = 28;
+        public static final int IS_RECORDING_FIELD = 29;
+    }
 
-	public static volatile byte[] LastCameraStatus = null;
+    public static volatile byte[] LastCameraStatus = null;
 
     public final boolean SpotMeter;
     public final byte TimelapseInterval;
@@ -130,7 +130,7 @@ public class GoProStatus {
     public GoProStatus(byte[] rawStatus) {
 
         if(rawStatus == null || rawStatus.length < RAW_STATUS_LEN) {
-			CameraMode = UNKNOW;
+            CameraMode = UNKNOW;
             StartupMode = UNKNOW;
             SpotMeter = false;
             TimelapseInterval = UNKNOW;

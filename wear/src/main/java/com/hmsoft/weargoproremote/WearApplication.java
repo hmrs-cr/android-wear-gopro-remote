@@ -35,8 +35,8 @@ public class WearApplication extends BaseApp {
         public void sendWearMessage(String path, byte[] data,
                                 final ResultCallback<MessageApi.SendMessageResult> callback);
     }
-	
-	public static void broadCastAction(Context context, String action) {
+
+    public static void broadCastAction(Context context, String action) {
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(action));
     }
 }

@@ -49,30 +49,30 @@ import java.io.File;
 
 public class WearMessageHandlerService extends Service
         implements SharedPreferences.OnSharedPreferenceChangeListener, Handler.Callback {
-	
-	private static final String TAG = "WearMessageHandlerService";
+
+    private static final String TAG = "WearMessageHandlerService";
     private static final int MESSAGE_INTENT = 1;
-	
-	public static final String ACTION_STOP = BuildConfig.APPLICATION_ID + ".ACTION_STOP";	
-	public static final String ACTION_HANDLE_MESSAGE_FROM_WEAR = BuildConfig.APPLICATION_ID + ".HANDLE_MESSAGE_FROM_WEAR";
-	public static final String ACTION_SEND_MESSAGE_TO_WEAR = BuildConfig.APPLICATION_ID + ".SEND_MESSAGE_TO_WEAR";
+
+    public static final String ACTION_STOP = BuildConfig.APPLICATION_ID + ".ACTION_STOP";
+    public static final String ACTION_HANDLE_MESSAGE_FROM_WEAR = BuildConfig.APPLICATION_ID + ".HANDLE_MESSAGE_FROM_WEAR";
+    public static final String ACTION_SEND_MESSAGE_TO_WEAR = BuildConfig.APPLICATION_ID + ".SEND_MESSAGE_TO_WEAR";
     //public static final String ACTION_LONG_TASK = BuildConfig.APPLICATION_ID + ".LONG_TASK";
     //public static final String EXTRA_TASK = BuildConfig.APPLICATION_ID + ".EXTRA_TASK";
     public static final String EXTRA_MESSAGE = BuildConfig.APPLICATION_ID + ".EXTRA_MESSAGE";
-	public static final String EXTRA_DATA = BuildConfig.APPLICATION_ID + ".EXTRA_DATA";
+    public static final String EXTRA_DATA = BuildConfig.APPLICATION_ID + ".EXTRA_DATA";
     public static final String EXTRA_DONT_SEND_STOP_TO_WEAR = BuildConfig.APPLICATION_ID + ".DONT_SEND_STOP_TO_WEAR";
 
     private static volatile Integer sCurrentWiFiNetworkId = null;
 
     private Builder mNotificationBuilder;
     private volatile boolean mPreviewEnabled;
-	private volatile GoProController mGoProController;
+    private volatile GoProController mGoProController;
     private volatile GoogleApiClient mGoogleApiClient;
     private volatile Node mWearableNode = null;
     private volatile String mPass;
-	private volatile SharedPreferences mPrefs;
+    private volatile SharedPreferences mPrefs;
 
-	private volatile Looper mExecutorLooper;
+    private volatile Looper mExecutorLooper;
     private volatile Handler mWorkHandler;
     //private volatile Looper mLongTaskLooper;
     //private volatile Handler mLongTaskHandler;
@@ -84,7 +84,7 @@ public class WearMessageHandlerService extends Service
 
     @Override
     public void onCreate() {
-		super.onCreate();
+        super.onCreate();
         if(Logger.DEBUG) Logger.debug(TAG, "Service created");
 
         HandlerThread executorThread = new HandlerThread("WearMessageHandlerService");
@@ -95,7 +95,7 @@ public class WearMessageHandlerService extends Service
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mPass = mPrefs.getString(getString(R.string.preference_wifi_password_key), "");
         mPreviewEnabled = mPrefs.getBoolean(getString(R.string.preference_watch_preview_enabled_key), true);
-		mGoProController = GoProController.getDefaultInstance(mPass);
+        mGoProController = GoProController.getDefaultInstance(mPass);
         mPrefs.registerOnSharedPreferenceChangeListener(this);
 
         mSendStatusTimer = new Timer(60000, mWorkHandler, new Timer.TimerTask() {
@@ -108,48 +108,48 @@ public class WearMessageHandlerService extends Service
         mSendStatusTimer.start();
 
         updateNotification(getString(R.string.status_connection_starting));
-	}
+    }
 
     @Override
     public void onDestroy() {
         mSendStatusTimer.stop();
-		mPrefs.unregisterOnSharedPreferenceChangeListener(this);
-		mExecutorLooper.quit();
-		disconnectGoogleApiClient();
+        mPrefs.unregisterOnSharedPreferenceChangeListener(this);
+        mExecutorLooper.quit();
+        disconnectGoogleApiClient();
         stopForeground(true);
-		GoProController.clear();
+        GoProController.clear();
         if(Logger.DEBUG) Logger.debug(TAG, "Service destroyed");
         super.onDestroy();
-	}
-	
-	@Override
-	public IBinder onBind (Intent intent) {
-		return null;
-	}
-		
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		if(intent != null) {
+    }
+
+    @Override
+    public IBinder onBind (Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if(intent != null) {
             final String action = intent.getAction();
 
             if(ACTION_STOP.equals(action)) {
                 mStopped = true;
-				mWorkHandler.removeCallbacksAndMessages(null);
+                mWorkHandler.removeCallbacksAndMessages(null);
                 mSendStatusTimer.stop();
                 updateNotification(getString(R.string.status_connection_disconnecting));
             }
 
             Message msg = mWorkHandler.obtainMessage(MESSAGE_INTENT, intent);
             mWorkHandler.sendMessage(msg);
-		}
-		return START_STICKY;
-	}
+        }
+        return START_STICKY;
+    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {        
         if(getString(R.string.preference_wifi_password_key).equals(key)) {
             mPass = sharedPreferences.getString(key, "");
-			mGoProController = GoProController.getDefaultInstance(mPass);
+            mGoProController = GoProController.getDefaultInstance(mPass);
         } else {
             mPreviewEnabled = mPrefs.getBoolean(getString(R.string.preference_watch_preview_enabled_key), true);
         }
@@ -200,7 +200,7 @@ public class WearMessageHandlerService extends Service
         startForeground(1, mNotificationBuilder.build());
     }
 
-	private boolean connectGoogleApiClient() {
+    private boolean connectGoogleApiClient() {
         if(mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(Wearable.API)
@@ -218,11 +218,11 @@ public class WearMessageHandlerService extends Service
         if(mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
             mGoogleApiClient = null;
-			if(Logger.DEBUG) Logger.debug(TAG, "GAPI client disconnected.");
+            if(Logger.DEBUG) Logger.debug(TAG, "GAPI client disconnected.");
         }
     }
-	
-	private boolean findWearableNode() {
+
+    private boolean findWearableNode() {
         if(mGoogleApiClient != null && mWearableNode == null) {
             NodeApi.GetConnectedNodesResult result = Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
             if (result.getNodes().size() > 0) {
@@ -230,7 +230,7 @@ public class WearMessageHandlerService extends Service
                 if (BuildConfig.DEBUG) {
                     Logger.debug(TAG, "Found wearable: name=" + mWearableNode.getDisplayName() +
                             ", id=" + mWearableNode.getId());
-				}
+                }
             } else {
                 mWearableNode = null;
             }
@@ -242,9 +242,9 @@ public class WearMessageHandlerService extends Service
         sendToWearable(WearMessages.addParamToMessage(path, param), data);
     }
 
-	private void sendToWearable(String path, byte[] data) {
-		
-		if(!connectGoogleApiClient()) {
+    private void sendToWearable(String path, byte[] data) {
+
+        if(!connectGoogleApiClient()) {
             Logger.error(TAG, "Failed to connect GoogleApiClient");
             return;
         }
@@ -258,21 +258,21 @@ public class WearMessageHandlerService extends Service
 
         Wearable.MessageApi.sendMessage(mGoogleApiClient, mWearableNode.getId(),
                     path, data).await();
-	}
-	
-	void sendCameraStatus() {
-		sendCameraStatus(0);
-	}
-	
-	private void sendCameraStatus(long time2Wait) {
-		if(time2Wait > 0) Utils.sleep(time2Wait);
-		
+    }
+
+    void sendCameraStatus() {
+        sendCameraStatus(0);
+    }
+
+    private void sendCameraStatus(long time2Wait) {
+        if(time2Wait > 0) Utils.sleep(time2Wait);
+
         byte[] status = mGoProController.getRawStatus();        
-		sendToWearable(WearMessages.MESSAGE_CAMERA_STATUS, status);
+        sendToWearable(WearMessages.MESSAGE_CAMERA_STATUS, status);
         byte mode = status != null && status.length >  GoProStatus.Fields.CAMERA_MODE_FIELD ?
                 status[GoProStatus.Fields.CAMERA_MODE_FIELD] : GoProStatus.UNKNOW;
 
-		String text;
+        String text;
         if(mode == GoProStatus.UNKNOW) {
             text = getString(R.string.status_connection_failed);
         } else if(mode == GoProStatus.CAMERA_MODE_OFF_WIFION) {
@@ -284,8 +284,8 @@ public class WearMessageHandlerService extends Service
                 text = getString(R.string.status_connection_connected, mCameraName);
             }            
         }
-		updateNotification(text);
-	}
+        updateNotification(text);
+    }
 
     private byte setCameraMode(byte newMode) {
         byte cameraMode = GoProStatus.UNKNOW;

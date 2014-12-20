@@ -95,12 +95,12 @@ public class WatchSettingsActivity extends Activity
         mListView.setAdapter(new SettingsAdapter(this));
         mListView.setClickListener(this);
      }
-	
-	@Override
+
+    @Override
     protected void onDestroy() {
-		mListView.setAdapter(null);
+        mListView.setAdapter(null);
         super.onDestroy();
-	}
+    }
 
     @Override
     public void onResume() {

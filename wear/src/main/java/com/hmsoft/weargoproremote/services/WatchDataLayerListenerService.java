@@ -33,14 +33,14 @@ import com.hmsoft.weargoproremote.ui.WatchMainActivity;
 public class WatchDataLayerListenerService extends WearableListenerService  {
 
     private static final String TAG = "WearCameraListenerService";
-    	
+
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if(BuildConfig.DEBUG) Logger.debug(TAG, "onMessageReceived: " + messageEvent.getPath());
         handleMessage(messageEvent.getPath(), messageEvent.getData());
     }
 
-	private void handleMessage(String message, byte[] data) {
+    private void handleMessage(String message, byte[] data) {
 
         switch (message) {
             case WearMessages.MESSAGE_SET_WEAR_SETTINGS:

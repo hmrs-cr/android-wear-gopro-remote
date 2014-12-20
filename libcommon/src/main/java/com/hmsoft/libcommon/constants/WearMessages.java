@@ -22,7 +22,7 @@ package com.hmsoft.libcommon.constants;
 public final class WearMessages {
     public static final String MESSAGE_CONNECT = "/connect";
     public static final String MESSAGE_DISCONNECT = "/disconnect";
-	public static final String MESSAGE_STOP = "/stop";
+    public static final String MESSAGE_STOP = "/stop";
     public static final String MESSAGE_SHUTTER = "/shutter";
     public static final String MESSAGE_CAMERA_NAME = "/camera/name";
     public static final String MESSAGE_CAMERA_STATUS = "/camera/status";
