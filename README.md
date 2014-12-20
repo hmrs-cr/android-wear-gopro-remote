@@ -15,7 +15,7 @@ Some features are:
 * Power off/on camera.
 
 ## Screenshots
-* Phone App -> http://goo.gl/q3f051
+* Phone App -> http://goo.gl/J5GNVM
 * Wear Main Activity -> http://goo.gl/A4uJJg - http://goo.gl/TQjm7q
 * Camera Mode selector -> http://goo.gl/4DA2wK
 * Video Resolution selector -> http://goo.gl/1hJ6pd
