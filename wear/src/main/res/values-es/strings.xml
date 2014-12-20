@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GoPro Remote</string>
+    <string name="action_video_vga60">VGA - 60fps</string>
+    <string name="action_video_72030">720p - 30fps</string>
+    <string name="action_video_72060">720p - 60fps</string>
+    <string name="action_video_96030">960p - 30fps</string>
+    <string name="action_video_108030">1080p - 30fps</string>
+    <string name="action_interval_halfsecond">0.5 segundos</string>
+    <string name="action_interval_1second">1 segundos</string>
+    <string name="action_interval_2second">2 segundos</string>
+    <string name="action_interval_5second">5 segundos</string>
+    <string name="label_camera_offline">Camara desconectada</string>
+    <string name="view_angle_wide">Amplio</string>
+    <string name="view_angle_medium">Medio</string>
+    <string name="view_angle_narrow">Estrecho</string>
+    <string name="video_mode_108030">1080p\n30fps</string>
+    <string name="video_mode_72030">720p\n30fps</string>
+    <string name="video_72060">720p\n60fps</string>
+    <string name="video_mode_96030">960p\n30fps</string>
+    <string name="video_mode_vga60">VGA\n60fps</string>
+    <string name="photo_mode_11mpwide">11MP Amplio</string>
+    <string name="photo_mode_5mpmedium">5MP Medio</string>
+    <string name="photo_mode_5mpwide">5MP Amplio</string>
+    <string name="photo_mode_8mpmedium">8PM Medio</string>
+    <string name="label_launcher">GoPro Remote</string>
+    <string name="label_connecting">Conectando…</string>
+    <string name="label_camera_off">Camera apagada</string>
+    <string name="action_mode_settings">Opciones</string>
+    <string name="setting_spot_metter">Spot Meter: %s</string>
+    <string name="setting_beep">Volumen de Sonido: %s</string>
+    <string name="setting_upside">Invertida: %s</string>
+    <string name="setting_leds">LEDs: %s</string>
+    <string name="setting_poweroff">Apagar</string>
+    <string name="setting_locate">Sonando: %s</string>
+    <string name="label_yes">Si</string>
+    <string name="label_no">No</string>
+    <string name="label_off">Apagado</string>
+    <string name="prompt_are_you_sure">¿Está seguro?</string>
+    <string name="label_no_images">No hay imagenes</string>
+
+</resources>

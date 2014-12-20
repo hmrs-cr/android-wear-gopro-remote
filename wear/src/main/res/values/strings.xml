@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GoPro Remote</string>
+    <string name="action_video_vga60">VGA - 60fps</string>
+    <string name="action_video_72030">720p - 30fps</string>
+    <string name="action_video_72060">720p - 60fps</string>
+    <string name="action_video_96030">960p - 30fps</string>
+    <string name="action_video_108030">1080p - 30fps</string>
+    <string name="action_interval_halfsecond">0.5 second</string>
+    <string name="action_interval_1second">1 second</string>
+    <string name="action_interval_2second">2 seconds</string>
+    <string name="action_interval_5second">5 seconds</string>
+    <string name="label_camera_offline">Camera offline</string>
+    <string name="view_angle_wide">Wide</string>
+    <string name="view_angle_medium">Medium</string>
+    <string name="view_angle_narrow">Narrow</string>
+    <string name="video_mode_108030">1080p\n30fps</string>
+    <string name="video_mode_72030">720p\n30fps</string>
+    <string name="video_72060">720p\n60fps</string>
+    <string name="video_mode_96030">960p\n30fps</string>
+    <string name="video_mode_vga60">VGA\n60fps</string>
+    <string name="photo_mode_11mpwide">11MP Wide</string>
+    <string name="photo_mode_5mpmedium">5MP Medium</string>
+    <string name="photo_mode_5mpwide">5MP Wide</string>
+    <string name="photo_mode_8mpmedium">8PM Medium</string>
+    <string name="label_launcher">GoPro Remote</string>
+    <string name="label_connecting">Connecting…</string>
+    <string name="label_camera_off">Camera Off</string>
+    <string name="title_activity_watch_settings">WatchSettingsActivity</string>
+    <string name="action_mode_settings">Settings</string>
+    <string name="setting_spot_metter">Spot Meter: %s</string>
+    <string name="setting_beep">Beep Volume: %s</string>
+    <string name="setting_upside">Upside Down: %s</string>
+    <string name="setting_leds">LEDs: %s</string>
+    <string name="setting_osd">OSD: %s</string>
+    <string name="setting_poweroff">Power Off</string>
+    <string name="setting_locate">Beeping: %s</string>
+    <string name="label_yes">Yes</string>
+    <string name="label_no">No</string>
+    <string name="label_off">Off</string>
+    <string name="prompt_are_you_sure">Are you sure?</string>
+    <string name="title_activity_preview">Image Viewer</string>
+    <string name="label_no_images">No images to show</string>
+
+</resources>

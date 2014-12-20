@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="preference_screen_main_key">preference_screen_main</string>
+    <string name="preference_category_wifi_key">preference_category_wifi</string>
+    <string name="preference_wifi_name_key">preference_wifi_name</string>
+    <string name="preference_wifi_password_key">preference_wifi_password</string>
+    <string name="preference_watch_shake_shutter_mode_key">preference_watch_shake_shutter_mode</string>
+    <string name="preference_category_watch_key">preference_category_watch</string>
+    <string name="preference_watch_shake_level_key">preference_watch_shake_level</string>
+    <string name="preference_wifi_test_key">preference_wifi_test</string>
+    <string name="preference_wifi_restore_network_key">preference_wifi_restore_network</string>
+</resources>

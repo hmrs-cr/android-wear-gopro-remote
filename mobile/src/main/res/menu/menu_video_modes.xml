@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.hmsoft.weargoproremote.ui.TestActivity">
+    <item android:id="@+id/action_video_vga60" android:title="@string/action_video_vga60"
+        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_video_72030" android:title="@string/action_video_72030"
+        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_video_720g60" android:title="@string/action_video_72060"
+        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_video_96030" android:title="@string/action_video_96030"
+        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_video_108030" android:title="@string/action_video_108030"
+        android:orderInCategory="100" android:showAsAction="never" />
+</menu>

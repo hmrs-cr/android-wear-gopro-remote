@@ -1,0 +1,28 @@
+apply plugin: 'com.android.application'
+
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "20.0.0"
+
+    defaultConfig {
+        applicationId "com.hmsoft.weargoproremote"
+        minSdkVersion 20
+        targetSdkVersion 21
+        versionCode 10
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.google.android.support:wearable:1.0.0'
+    compile 'com.google.android.gms:play-services-wearable:5.0.77'
+    compile project(':libcommon')
+}

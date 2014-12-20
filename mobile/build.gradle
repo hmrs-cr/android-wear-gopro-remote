@@ -1,0 +1,38 @@
+apply plugin: 'com.android.application'
+
+def versionMajor = 1
+def versionMinor = 0
+def verCode = 10;
+
+def buildTime() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmms')
+    return formattedDate
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "20.0.0"
+    defaultConfig {
+        applicationId "com.hmsoft.weargoproremote"
+        minSdkVersion 19
+        targetSdkVersion 21
+        versionName "${versionMajor}.${versionMinor}.${verCode} (${buildTime()})"
+        versionCode verCode
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    wearApp project(':wear')
+    compile 'com.google.android.gms:play-services:+'
+    compile project(':libcommon')
+}

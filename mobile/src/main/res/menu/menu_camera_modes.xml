@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.hmsoft.weargoproremote.ui.TestActivity">
+    <item android:id="@+id/action_mode_video" android:title="@string/action_mode_video"
+        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_mode_photo" android:title="@string/action_mode_photo"
+        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_mode_burst" android:title="@string/action_mode_burst"
+        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_mode_timelapse" android:title="@string/action_mode_timelapse"
+        android:orderInCategory="100" android:showAsAction="never" />
+</menu>

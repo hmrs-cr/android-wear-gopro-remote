@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.hmsoft.weargoproremote.ui.TestActivity">
+    <item android:id="@+id/action_interval_halsecond" android:title="@string/action_interval_halfsecond"
+        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_interval_1second" android:title="@string/action_interval_1second"
+        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_interval_2second" android:title="@string/action_interval_2second"
+        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_interval_5second" android:title="@string/action_interval_5second"
+        android:orderInCategory="100" android:showAsAction="never" />
+</menu>

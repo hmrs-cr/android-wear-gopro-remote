@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hmsoft.weargoproremote" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:name="com.hmsoft.libcommon.general.BaseApp"
+        android:theme="@style/AppTheme" >
+		
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".ui.MobileMainActivity"
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".services.MobileDataLayerListenerService" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+            </intent-filter>
+        </service>
+		
+		<service android:name=".services.WearMessageHandlerService" >
+            <intent-filter>
+                <action android:name="com.hmsoft.weargoproremote.HANDLE_MESSAGE_FROM_WEAR" />
+				<action android:name="com.hmsoft.weargoproremote.SEND_MESSAGE_TO_WEAR" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".services.WifiIntentReceiver" >
+            <intent-filter>
+                <action android:name="android.net.wifi.supplicant.STATE_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

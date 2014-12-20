@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wear GoPro Remote</string>
+    <string name="action_settings">Opciones</string>
+    <string name="title_activity_main">GoProController Test</string>
+    <string name="action_mode_video">Video</string>
+    <string name="action_mode_photo">Foto</string>
+    <string name="action_mode_burst">Rafaga</string>
+    <string name="action_mode_timelapse">Lapso</string>
+    <string name="action_video_vga60">VGA - 60fps</string>
+    <string name="action_video_72030">720p - 30fps</string>
+    <string name="action_video_72060">720p - 60fps</string>
+    <string name="action_video_96030">960p - 30fps</string>
+    <string name="action_video_108030">1080p - 30fps</string>
+    <string name="action_interval_halfsecond">0.5 segundos</string>
+    <string name="action_interval_1second">1 segundos</string>
+    <string name="action_interval_2second">2 segundos</string>
+    <string name="action_interval_5second">5 segundos</string>
+    <string name="title_activity_settings">Wear GoPro Remote</string>
+    <string name="preference_category_wifi_title">Opciones WiFi</string>
+    <string name="preference_wifi_name_title">WiFi SSID</string>
+    <string name="preference_wifi_password_title">Clave WiFi</string>
+    <string name="preference_category_watch_title">Opciones del Reloj</string>
+    <string name="preference_watch_shake_shutter_mode_title">Modo de cámara al disparar:</string>
+    <string name="preference_watch_shake_level_title">Nivel de sacudida</string>
+    <string name="preference_wifi_test_title">Probar conexion</string>
+    <string name="status_connection">Conectando…</string>
+    <string name="status_not_connected">No se puede conectar a la cámara</string>
+    <string name="status_connected">Conectado correctamente!</string>
+    <string name="value_enabled">Habilitado</string>
+    <string name="value_disabled">Deshabilitado</string>
+    <string name="preference_category_version_title">Version</string>
+    <string name="preference_wifi_restore_network_title">Reconectar WiFi</string>
+    <string name="notification_tittle">Wear GoPro Remote</string>
+    <string name="action_stop">Detener</string>
+    <string name="status_connection_failed">Error de conexión</string>
+    <string name="status_connection_connected">Conectado a %s</string>
+    <string name="status_connection_disconnecting">Desconectando…</string>
+    <string name="status_connection_starting">Iniciando…</string>
+    <string name="status_connection_connecting">Conectando…</string>
+    <string name="status_connection_camera_off">Conectado. Cámara apagada</string>
+    <string name="preference_watch_preview_enabled_key">preference_watch_preview_enabled</string>
+    <string name="preference_watch_preview_enabled_title">Vista Previa</string>
+    <string name="status_connection_connected1">Conectado</string>
+
+    <string-array name="preference_watch_shake_shutter_mode_entries">
+        <item>Por defecto</item>
+        <item>Video</item>
+        <item>Foto</item>
+        <item>Rafaga</item>
+        <item>Lapso</item>
+    </string-array>
+    <string-array name="preference_watch_shake_shutter_mode_values">
+        <item>-1</item>>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="preference_watch_shake_level_entries">
+        <item>Desactivado</item>
+        <item>Muy Debil</item>
+        <item>Debil</item>
+        <item>Medio</item>
+        <item>Fuerte</item>
+        <item>Muy Fuerte</item>
+    </string-array>
+    <string-array name="preference_watch_shake_level_values">
+        <item>0</item>
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>7</item>
+        <item>9</item>>
+    </string-array>
+
+</resources>
