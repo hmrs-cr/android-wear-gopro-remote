@@ -63,8 +63,8 @@ public class GoProController {
         this(DEFAULT_GOPROADDRESS, password);
     }
 
-    public static GoProController getDefaultInstance(String pass) {
-        if(sDefaultInstance == null || !sDefaultInstance.fPassword.equals(pass)) {
+    public static synchronized GoProController getDefaultInstance(String pass) {
+        if(pass == null || sDefaultInstance == null || !pass.equals(sDefaultInstance.fPassword)) {
             sDefaultInstance = new GoProController(pass);
         }
         return sDefaultInstance;
@@ -98,8 +98,8 @@ public class GoProController {
 
         if(BuildConfig.DEBUG) Logger.debug(TAG, "Connected to URL: %s", urlStr);
 
-        urlConnection.setConnectTimeout(2000);
-        urlConnection.setReadTimeout(2000);
+        urlConnection.setConnectTimeout(5000);
+        urlConnection.setReadTimeout(10000);
 
         return urlConnection;
     }
@@ -169,6 +169,14 @@ public class GoProController {
             GoProStatus.LastCameraStatus = getRawStatus();
         }
         return GoProStatus.LastCameraStatus;
+    }
+
+    public String getPassword() {
+        byte[] response = execBackpackCommand("sd", null);
+        if(responseOk(response)) {
+            return (new String(response)).trim();
+        }
+        return null;
     }
 
     public String getCameraName() {
