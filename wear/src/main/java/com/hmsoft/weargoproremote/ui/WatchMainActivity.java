@@ -52,7 +52,6 @@ import com.hmsoft.libcommon.general.Timer;
 import com.hmsoft.libcommon.gopro.GoProController;
 import com.hmsoft.libcommon.gopro.GoProStatus;
 import com.hmsoft.libcommon.sensors.ShakeDetectEventListener;
-import com.hmsoft.weargoproremote.BuildConfig;
 import com.hmsoft.weargoproremote.R;
 import com.hmsoft.weargoproremote.WearApplication;
 import com.hmsoft.weargoproremote.cache.ThumbCache;
@@ -209,14 +208,14 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
             if(mShakeDetectActivity == null) {
                 mShakeDetectActivity = new ShakeDetectEventListener(this);
                 mShakeDetectActivity.addListener(this);
-                if(BuildConfig.DEBUG) Logger.debug(TAG, "Shake detector created");
+                if(Logger.DEBUG) Logger.debug(TAG, "Shake detector created");
             }
             mShakeDetectActivity.setMinimumEachDirection(mSettings.getShakeLevel());
         } else {
             if(mShakeDetectActivity != null) {
                 mShakeDetectActivity.stopDetecting();
                 mShakeDetectActivity = null;
-                if(BuildConfig.DEBUG) Logger.debug(TAG, "Shake detector destroyed");
+                if(Logger.DEBUG) Logger.debug(TAG, "Shake detector destroyed");
             }
         }
     }
@@ -228,7 +227,7 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
             public void onResult(NodeApi.GetConnectedNodesResult result) {
                 if(result.getNodes().size()>0) {
                     mPhoneNode = result.getNodes().get(0);
-                    if(BuildConfig.DEBUG) Logger.debug(TAG, "Found wearable: name=" + mPhoneNode.getDisplayName() + ", id=" + mPhoneNode.getId());
+                    if(Logger.DEBUG) Logger.debug(TAG, "Found wearable: name=" + mPhoneNode.getDisplayName() + ", id=" + mPhoneNode.getId());
                     sendConnectMessage();
                 } else {
                     mPhoneNode = null;
@@ -238,28 +237,29 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
         });
     }
 
-    private void sendConnectMessage() {
-        sendToPhone(WearMessages.MESSAGE_CONNECT, null, new ResultCallback<MessageApi.SendMessageResult>() {
+    private boolean sendConnectMessage() {
+        return sendToPhone(WearMessages.MESSAGE_CONNECT, null, new ResultCallback<MessageApi.SendMessageResult>() {
             @Override
             public void onResult(MessageApi.SendMessageResult sendMessageResult) {
-                if(!sendMessageResult.getStatus().isSuccess()) {
+                if (!sendMessageResult.getStatus().isSuccess()) {
                     updateStatusUi(null);
                 }
             }
         }, false);
     }
 
-    private void sendToPhone(String path, byte[] data,
+    private boolean sendToPhone(String path, byte[] data,
                              final ResultCallback<MessageApi.SendMessageResult> callback,
                              boolean showSpinner) {
 
         if (mPhoneNode != null) {
             long diff = System.currentTimeMillis() - mLastMessageToPhone;
             if(diff <= 1000) {
-                Logger.debug(TAG, "Last message to phone was %d millis ago", diff);
-                return;
+                if(Logger.DEBUG) Logger.debug(TAG, "Last message to phone was %d millis ago", diff);
+                return false;
             }
             if(showSpinner) showSpinner();
+            if(Logger.DEBUG) Logger.debug(TAG, "Message sent %s", path);
             if (mShakeDetectActivity != null) mShakeDetectActivity.stopDetecting();
             PendingResult<MessageApi.SendMessageResult> pending = Wearable.MessageApi.sendMessage(mGoogleApiClient, mPhoneNode.getId(), path, data);
             pending.setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
@@ -271,13 +271,16 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
                     if (result.getStatus().isSuccess()) {
                         mLastMessageToPhone = System.currentTimeMillis();
                     } else {
-                        hideSpinner();
-                        if(BuildConfig.DEBUG) Logger.debug(TAG, "Failed to send Message: " + result.getStatus());
+                        setFailStatusMessage(R.string.label_watch_disconnected, R.drawable.ic_retry);
+                        Logger.warning(TAG, "Failed to send Message: " + result.getStatus());
                     }
                 }
             });
+
+            return true;
         } else {
             Logger.error(TAG, String.format("Tried to send message (%s) before device was found.", path));
+            return false;
         }
     }
 
@@ -294,7 +297,7 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        if(BuildConfig.DEBUG) Logger.debug(TAG, "onMessageReceived: " + messageEvent.getPath());
+        if(Logger.DEBUG) Logger.debug(TAG, "onMessageReceived: " + messageEvent.getPath());
         handleMessage(messageEvent.getPath(), messageEvent.getData());
     }   
 
@@ -385,6 +388,7 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
                 startIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startIntent.addCategory(Intent.CATEGORY_LAUNCHER);
                 startActivity(startIntent);
+                sendToPhone(WearMessages.MESSAGE_CAMERA_STATUS, null, null, false);
                 break;
 
             case WearMessages.MESSAGE_STOP:
@@ -447,34 +451,43 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
         return String.format("%02dH:%02d", hours, mins);
     }
 
+    private void setFailStatusMessage(int messageId, int iconReloadBtnId) {
+        mTxtStatus.setText(messageId);
+        mLayoutStatus.setVisibility(View.VISIBLE);
+        mBtnReconnect.setVisibility(View.VISIBLE);
+        mBtnReconnect.setImageResource(iconReloadBtnId);
+        mLayoutControls.setVisibility(View.GONE);
+        mProgressBarConnecting.setVisibility(View.GONE);
+        hideSpinner();
+
+    }
+
     private void updateStatusUi(final GoProStatus status) {
 
         initShakeDetector(status);
 
+        if(mPhoneNode == null) {
+            if(Logger.DEBUG) Logger.debug(TAG, "Watch Offline");
+            setFailStatusMessage(R.string.label_watch_disconnected, R.drawable.ic_retry);
+            return;
+        }
+
         if(status == null || status.CameraMode == GoProStatus.UNKNOW) {
-            if(BuildConfig.DEBUG) Logger.debug(TAG, "Camera Offline");
-            mTxtStatus.setText(getString(R.string.label_camera_offline));
-            mLayoutStatus.setVisibility(View.VISIBLE);
-            mBtnReconnect.setVisibility(View.VISIBLE);
-            mBtnReconnect.setImageResource(R.drawable.ic_retry);
-            mLayoutControls.setVisibility(View.GONE);
-            mProgressBarConnecting.setVisibility(View.GONE);
-
+            if(Logger.DEBUG) Logger.debug(TAG, "Camera Offline");
+            setFailStatusMessage(R.string.label_camera_offline, R.drawable.ic_retry);
             reconnect();
-
-            hideSpinner();
             return;
         }
 
         if(status.CameraMode == GoProStatus.CAMERA_MODE_OFF_WIFION) {
-            if(BuildConfig.DEBUG) Logger.debug(TAG, "Camera off");
-            mTxtStatus.setText(getString(R.string.label_camera_off));
-            mLayoutStatus.setVisibility(View.VISIBLE);
-            mBtnReconnect.setVisibility(View.VISIBLE);
-            mBtnReconnect.setImageResource(R.drawable.icon_power);
-            mProgressBarConnecting.setVisibility(View.GONE);
-            mLayoutControls.setVisibility(View.GONE);
+            if(Logger.DEBUG) Logger.debug(TAG, "Camera off");
+            setFailStatusMessage(R.string.label_camera_off, R.drawable.icon_power);
+            return;
+        }
 
+        if(status.CameraMode == GoProStatus.CAMERA_MODE_NO_CONFIG) {
+            if(Logger.DEBUG) Logger.debug(TAG, "No WiFi config");
+            setFailStatusMessage(R.string.label_wifi_noconfig, R.drawable.ic_retry);
             hideSpinner();
             return;
         }
@@ -490,7 +503,7 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
         mLayoutControls.setVisibility(View.VISIBLE);
         //mTxtStatus.setText(mCameraName);
 
-        mBtnShutter.setText(String.format("%d\n\n[ %d ]",  status.PhotoCount, status.PhotosAvailable));
+        mBtnShutter.setText(String.format("%d\n\n[ %d ]", status.PhotoCount, status.PhotosAvailable));
         mTxtBatteryLevel.setText(status.BatteryLevel + "%");
         if(status.BatteryLevel <= 100 && status.BatteryLevel >= 75) {
             mImgBatteryLevel.setImageResource(R.drawable.icon_batt_03);
@@ -690,14 +703,19 @@ public class WatchMainActivity extends Activity  implements GoogleApiClient.Conn
     }
 
     public void tryReconnect(View view) {
-        mTxtStatus.setText(getString(R.string.label_connecting));
-        mProgressBarConnecting.setVisibility(View.VISIBLE);
-        mBtnReconnect.setVisibility(View.GONE);
+
+        boolean displayProgress = true;
 
         if(mPhoneNode == null) {
             findPhoneNode();
         } else {
-            sendConnectMessage();
+            displayProgress = sendConnectMessage();
+        }
+
+        if(displayProgress) {
+            mTxtStatus.setText(getString(R.string.label_connecting));
+            mProgressBarConnecting.setVisibility(View.VISIBLE);
+            mBtnReconnect.setVisibility(View.GONE);
         }
     }
 

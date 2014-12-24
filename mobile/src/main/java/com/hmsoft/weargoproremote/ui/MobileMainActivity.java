@@ -16,6 +16,7 @@
 
 package com.hmsoft.weargoproremote.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -46,6 +48,7 @@ import com.hmsoft.libcommon.sensors.ShakeDetectEventListener;
 import com.hmsoft.weargoproremote.BuildConfig;
 import com.hmsoft.weargoproremote.R;
 import com.hmsoft.weargoproremote.helpers.WifiHelper;
+import com.hmsoft.weargoproremote.services.WearMessageHandlerService;
 
 public class MobileMainActivity extends PreferenceActivity implements
         Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener,
@@ -59,6 +62,8 @@ public class MobileMainActivity extends PreferenceActivity implements
     private PreferenceCategory mPrefCategoryWatch;
     private boolean mWatchSettingsChanged;
     private WearSettings fCurrentWearSettings;
+    EditTextPreference mWifiNamePref;
+    EditTextPreference mWifiPassPref;
     GoProController mGoProController;
 
     @Override
@@ -70,9 +75,16 @@ public class MobileMainActivity extends PreferenceActivity implements
         fCurrentWearSettings = new WearSettings();
         fCurrentWearSettings.loadFromPreferences(this, PreferenceManager.getDefaultSharedPreferences(this));
 
+        mWifiNamePref = ((EditTextPreference)findPreference(getString(R.string.preference_wifi_name_key)));
+        mWifiPassPref = ((EditTextPreference)findPreference(getString(R.string.preference_wifi_password_key)));
+
         Preference version = findPreference("preference_version_number");
         version.setTitle(BuildConfig.VERSION_NAME);
         version.setSummary(BuildConfig.FLAVOR + " " + BuildConfig.BUILD_TYPE);
+
+        if(TextUtils.isEmpty(mWifiNamePref.getText()) || TextUtils.isEmpty(mWifiPassPref.getText())) {
+            TestConnectionTask.run(this, findPreference(getString(R.string.preference_wifi_test_key)));
+        }
     }
 
     @Override
@@ -83,8 +95,6 @@ public class MobileMainActivity extends PreferenceActivity implements
 
     @Override
     protected void onPause() {
-        //if(BuildConfig.DEBUG && mGoProController != null) mGoProController.setPreviewOn(false, null);
-
         super.onPause();
         if(mShakeDetectActivity != null) {
             mShakeDetectActivity.stopDetecting();
@@ -151,7 +161,7 @@ public class MobileMainActivity extends PreferenceActivity implements
     @Override
     public boolean onPreferenceClick(final Preference preference) {
         if(getString(R.string.preference_wifi_test_key).equals(preference.getKey())) {
-            TestConnectionTask.run(this, preference);
+           TestConnectionTask.run(this, preference);
            return true;
         }
         return false;
@@ -216,14 +226,15 @@ public class MobileMainActivity extends PreferenceActivity implements
             }
         }
 
-        /*
-        if(preference.getKey().equals(getString(com.hmsoft.libcommon.R.string.preference_wifi_password_key))) {
-            if(mGoProController != null) {
-                //mGoProController = new AsyncGoProController(stringValue);
-            }
-        }*/
-
         return true;
+    }
+
+    void setWiFiConfig(String ssid, String pass) {
+        mWifiNamePref.setText(ssid);
+        onPreferenceChange(mWifiNamePref, ssid);
+
+        mWifiPassPref.setText(pass);
+        onPreferenceChange(mWifiPassPref, pass);
     }
 
     private void connectGoogleApiClient() {
@@ -276,6 +287,9 @@ public class MobileMainActivity extends PreferenceActivity implements
         private Preference preference;
         private MobileMainActivity mActivity;
         private static TestConnectionTask instance;
+        private String mWifiSSID;
+        private String mWifiPass;
+        private boolean mNeedUpdateWifiConfig;
 
         private TestConnectionTask() {}
 
@@ -283,15 +297,12 @@ public class MobileMainActivity extends PreferenceActivity implements
             if(instance == null) {
                 instance = new TestConnectionTask();
 
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-                String pass = prefs.getString(activity.getString(R.string.preference_wifi_password_key), "");
-                String ssid = prefs.getString(activity.getString(R.string.preference_wifi_name_key), "");
+                String pass = activity.mWifiPassPref.getText();
+                String ssid = activity.mWifiNamePref.getText();
 
                 pref.setSummary(activity.getString(R.string.status_connection));
 
-                if(activity.mGoProController == null) {
-                    activity.mGoProController = new GoProController(pass);
-                }
+                activity.mGoProController = GoProController.getDefaultInstance(pass);
 
                 instance.mActivity = activity;
                 instance.execute(pref, ssid, pass);
@@ -301,7 +312,21 @@ public class MobileMainActivity extends PreferenceActivity implements
         @Override
         protected Boolean doInBackground(Object... params) {
             preference = (Preference)params[0];
-            boolean success = WifiHelper.connectToWifi(mActivity, params[1].toString(), params[2].toString());
+
+            mWifiSSID = params[1].toString();
+            mWifiPass = params[2].toString();
+
+            if(TextUtils.isEmpty(mWifiSSID)) {
+                mWifiSSID = WifiHelper.getCurrentWifiName(mActivity);
+            }
+
+            if(TextUtils.isEmpty(mWifiPass)) {
+                mWifiPass = mActivity.mGoProController.getPassword();
+                mNeedUpdateWifiConfig = !TextUtils.isEmpty(mWifiPass);
+                mActivity.mGoProController = GoProController.getDefaultInstance(mWifiPass);
+            }
+
+            boolean success = WifiHelper.connectToWifi(mActivity, mWifiSSID, mWifiPass);
 
             if(!success) {
                 return false;
@@ -315,6 +340,14 @@ public class MobileMainActivity extends PreferenceActivity implements
                     break;
                 }
             }
+
+            if(status.CameraMode == GoProStatus.CAMERA_MODE_OFF_WIFION) {
+                if(mActivity.mGoProController.turnOn()) {
+                    Utils.sleep(5000);
+                    status = mActivity.mGoProController.getStatus();
+                }
+            }
+
             success = status.CameraMode > GoProStatus.UNKNOW;            
             return success;
         }
@@ -340,6 +373,13 @@ public class MobileMainActivity extends PreferenceActivity implements
             } else {
                 preference.setSummary(mActivity.getString(R.string.status_not_connected));
                 //mActivity.mGoProController = null;
+            }
+            if(mNeedUpdateWifiConfig) {
+                mActivity.setWiFiConfig(mWifiSSID, mWifiPass);
+                Intent i = new Intent(mActivity, WearMessageHandlerService.class);
+                i.setAction(WearMessageHandlerService.ACTION_SEND_MESSAGE_TO_WEAR);
+                i.putExtra(WearMessageHandlerService.EXTRA_MESSAGE, WearMessages.MESSAGE_LAUNCH_ACTIVITY);
+                mActivity.startService(i);
             }
         }
     }

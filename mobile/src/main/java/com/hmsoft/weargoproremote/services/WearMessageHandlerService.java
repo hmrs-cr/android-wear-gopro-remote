@@ -105,7 +105,6 @@ public class WearMessageHandlerService extends Service
                 if(BuildConfig.DEBUG) Logger.debug(TAG, "Status sent...");
             }
         });
-        mSendStatusTimer.start();
 
         updateNotification(getString(R.string.status_connection_starting));
     }
@@ -254,7 +253,7 @@ public class WearMessageHandlerService extends Service
             return;
         }
 
-        if(BuildConfig.DEBUG) Logger.debug(TAG, "Send to wearable:" + path);
+        if(Logger.DEBUG) Logger.debug(TAG, "Send to wearable:" + path);
 
         Wearable.MessageApi.sendMessage(mGoogleApiClient, mWearableNode.getId(),
                     path, data).await();
@@ -375,7 +374,16 @@ public class WearMessageHandlerService extends Service
         switch (message) {
             case WearMessages.MESSAGE_CONNECT:
                 updateNotification(getString(R.string.status_connection_connecting));
+
                 String ssid = mPrefs.getString(getString(R.string.preference_wifi_name_key), "");
+                if(TextUtils.isEmpty(ssid) || TextUtils.isEmpty(mPass)) {
+                    byte[] status = new byte[GoProStatus.RAW_STATUS_LEN];
+                    status[GoProStatus.Fields.CAMERA_MODE_FIELD] = GoProStatus.CAMERA_MODE_NO_CONFIG;
+                    sendToWearable(WearMessages.MESSAGE_CAMERA_STATUS, status);
+                    updateNotification(getString(R.string.status_connection_noconfig));
+                    break;
+                }
+
                 if(sCurrentWiFiNetworkId == null) {
                     sCurrentWiFiNetworkId = WifiHelper.getCurrentWiFiNetworkId(getApplicationContext());
                 }
@@ -399,6 +407,7 @@ public class WearMessageHandlerService extends Service
                 if(name != null) {
                     sendThumbsToWatch(1, 50, false);
                 }
+                mSendStatusTimer.start();
                 break;
 
             case WearMessages.MESSAGE_DISCONNECT:
@@ -426,7 +435,7 @@ public class WearMessageHandlerService extends Service
                         waitTime = isRecording ? 1550 : 1250;
                         if (mPreviewEnabled && (mode == GoProStatus.CAMERA_MODE_PHOTO || mode == GoProStatus.CAMERA_MODE_BURST ||
                                 isRecording)) {
-                            waitTime = 900;
+                            waitTime = 1000;
                             if (mode == GoProStatus.CAMERA_MODE_BURST) {
                                 waitTime = 1350;
                             }
@@ -438,7 +447,7 @@ public class WearMessageHandlerService extends Service
                                 sendToWearable(WearMessages.MESSAGE_LAST_IMG_THUMB, thumbName,
                                         thumb.BitmapData);
                             }
-                            waitTime = 350;
+                            waitTime = 250;
                             sendThumbsToWatch(1, 10, false);
                         }
                     }

@@ -23,6 +23,7 @@ public class GoProStatus {
 
     public static final int RAW_STATUS_LEN = 31;
 
+    public static final byte CAMERA_MODE_NO_CONFIG = -3;
     public static final byte CAMERA_MODE_OFF_WIFION = -2;
     public static final byte CAMERA_MODE_VIDEO = 0;
     public static final byte CAMERA_MODE_PHOTO = 1;

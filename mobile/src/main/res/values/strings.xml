@@ -43,6 +43,7 @@
     <string name="preference_watch_preview_enabled_key">preference_watch_preview_enabled</string>
     <string name="preference_watch_preview_enabled_title">Picture Preview</string>
     <string name="status_connection_connected1">Connected</string>
+    <string name="status_connection_noconfig">GoPro WiFi and password not configured.</string>
 
     <string-array name="preference_watch_shake_shutter_mode_entries">
         <item>Default</item>

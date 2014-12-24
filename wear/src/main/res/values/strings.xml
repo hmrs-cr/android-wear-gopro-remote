@@ -42,5 +42,7 @@
     <string name="prompt_are_you_sure">Are you sure?</string>
     <string name="title_activity_preview">Image Viewer</string>
     <string name="label_no_images">No images to show</string>
+    <string name="label_wifi_noconfig">Camera WiFi not configured.</string>
+    <string name="label_watch_disconnected">Watch disconnected</string>
 
 </resources>

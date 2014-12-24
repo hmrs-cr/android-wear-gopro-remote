@@ -31,6 +31,26 @@ public class WifiHelper {
     private static final String TAG = "WifiHelper";
     private WifiHelper() {}
 
+    public static  String getCurrentWifiName(Context context) {
+        final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        if(wifiManager == null) {
+            return null;
+        }
+
+        WifiInfo info = wifiManager.getConnectionInfo();
+        if(info == null || info.getNetworkId() < 0) {
+            return null;
+        }
+
+        String ssid = info.getSSID();
+
+        if(ssid != null && ssid.startsWith("\"") && ssid.endsWith("\"")) {
+            ssid = ssid.substring(1, ssid.length() - 1);
+        }
+
+        return ssid;
+    }
+
     public static int getCurrentWiFiNetworkId(Context context) {
         final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         if(wifiManager == null) {
