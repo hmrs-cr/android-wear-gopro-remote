@@ -23,7 +23,6 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
 import com.hmsoft.libcommon.constants.WearMessages;
 import com.hmsoft.libcommon.general.Logger;
-import com.hmsoft.weargoproremote.BuildConfig;
 
 public class MobileDataLayerListenerService extends WearableListenerService  {
 
@@ -31,7 +30,7 @@ public class MobileDataLayerListenerService extends WearableListenerService  {
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        if(BuildConfig.DEBUG) Logger.debug(TAG, "Message received: %s", messageEvent.getPath());
+        if(Logger.DEBUG) Logger.debug(TAG, "Message received: %s", messageEvent.getPath());
 
         String path = messageEvent.getPath();
         Context context = getApplicationContext();
