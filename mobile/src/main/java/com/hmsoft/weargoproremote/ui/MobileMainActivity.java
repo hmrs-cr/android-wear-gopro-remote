@@ -300,6 +300,9 @@ public class MobileMainActivity extends PreferenceActivity implements
                 String pass = activity.mWifiPassPref.getText();
                 String ssid = activity.mWifiNamePref.getText();
 
+                if(pass == null) pass = "";
+                if(ssid == null) ssid = "";
+
                 pref.setSummary(activity.getString(R.string.status_connection));
 
                 activity.mGoProController = GoProController.getDefaultInstance(pass);
