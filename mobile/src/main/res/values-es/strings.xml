@@ -75,5 +75,6 @@
         <item>7</item>
         <item>9</item>>
     </string-array>
+    <string name="status_connection_noconfig">GoPro WiFi y clave no configurados</string>
 
 </resources>
