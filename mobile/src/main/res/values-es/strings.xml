@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Wear GoPro Remote</string>
-    <string name="action_settings">Opciones</string>
+    <string name="action_send_logs">Enviar registros</string>
     <string name="title_activity_main">GoProController Test</string>
     <string name="action_mode_video">Video</string>
     <string name="action_mode_photo">Foto</string>

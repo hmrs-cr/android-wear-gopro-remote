@@ -107,8 +107,8 @@ public class GoProController {
         return urlConnection;
     }
 
-    private HttpURLConnection getMediaConnection(String command, String param) {
-        String urlStr = "http://" + mCameraAddress + ":8080/gp/" + command;
+    private HttpURLConnection getMediaConnection(String path, String fileName, String param) {
+        String urlStr = "http://" + mCameraAddress + ":8080/" + path + fileName;
         if(param != null) {
             urlStr += "?p=" + param;
         }
@@ -289,11 +289,13 @@ public class GoProController {
     // ************************** Media ******************************* //
     // **************************************************************** //
 
+    private static final String GP_PATH = "gp/";
+
     private File mThumbnailCacheDirectory;
     private JSONArray mLastMediaList;
 
     private JSONArray getMediaJSONList() {
-        HttpURLConnection connection = getMediaConnection("gpMediaList", null);
+        HttpURLConnection connection = getMediaConnection(GP_PATH, "gpMediaList", null);
         if(connection == null) return null;
         try {
             long start = 0;
@@ -411,7 +413,7 @@ public class GoProController {
         long start = 0;
         if(DEBUG) start = System.currentTimeMillis();
 
-        HttpURLConnection connection = getMediaConnection("gpMediaMetadata", fileName);
+        HttpURLConnection connection = getMediaConnection(GP_PATH, "gpMediaMetadata", fileName);
         if(connection == null) return null;
         try {
             InputStream in = connection.getInputStream();
@@ -493,6 +495,88 @@ public class GoProController {
                 name = dirName + new String(carray) + "-" + group;
             }
             return name;
+        }
+    }
+
+    // Diagnostics
+
+    public CameraInfo getCameraInfo() {
+        HttpURLConnection connection = getMediaConnection("videos/MISC/", "version.txt", null);
+        if(connection == null) return null;
+        try {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                int cl = connection.getContentLength();
+                StringBuilder builder = cl > 0 ? new StringBuilder(cl) : new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
+                return new CameraInfo(builder.toString());
+            } finally {
+                connection.disconnect();
+            }
+        } catch (IOException e){
+            Logger.warning(TAG, "Error getting version.txt", e);
+        }
+        return null;
+    }
+
+    public static class CameraInfo {
+       /*
+                "info version":"1.1",
+                "firmware version":"HD3.09.03.03",
+                "wifi version": "3.4.2.18",
+                "wifi bootloader version": "0.2.2",
+                "wifi mac":"",
+                "camera type":"Hero3-White Edition",
+       */
+        public final String InfoVersion;
+        public final String FirmwareVersion;
+        public final String WifiVersion;
+        public final String WifiBootloaderVersion;
+        public final String CameraType;
+
+        public CameraInfo(String cameraInfoJon) {
+            String infoVersion = "";
+            String firmwareVersion = "";
+            String wifiVersion = "";
+            String wifiBootloaderVersion = "";
+            String cameraType = "";
+
+            try {
+                if(cameraInfoJon.endsWith(",}")) cameraInfoJon = cameraInfoJon.replace(",}", "}");
+                JSONObject jobj = new JSONObject(cameraInfoJon);
+                infoVersion = jobj.optString("info version");
+                firmwareVersion = jobj.optString("firmware version");
+                wifiVersion = jobj.optString("wifi version");
+                wifiBootloaderVersion = jobj.optString("wifi bootloader version");
+                cameraType = jobj.optString("camera type");
+            } catch (JSONException e) {
+
+                Logger.warning(TAG, "Error parsing CameraInfo JSON", e);
+            }
+
+            InfoVersion = infoVersion;
+            FirmwareVersion = firmwareVersion;
+            WifiVersion = wifiVersion;
+            WifiBootloaderVersion = wifiBootloaderVersion;
+            CameraType = cameraType;
+        }
+
+        public void toString(StringBuilder sb) {
+            sb.append("InfoVersion: ");sb.append(InfoVersion);sb.append("\n");
+            sb.append("FirmwareVersion: ");sb.append(FirmwareVersion);sb.append("\n");
+            sb.append("WifiVersion: ");sb.append(WifiVersion);sb.append("\n");
+            sb.append("WifiBootloaderVersion: ");sb.append(WifiBootloaderVersion);sb.append("\n");
+            sb.append("CameraType: ");sb.append(CameraType);sb.append("\n");
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            toString(sb);
+            return sb.toString();
         }
     }
 }

@@ -16,6 +16,7 @@
 
 package com.hmsoft.weargoproremote.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -31,6 +32,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -41,6 +43,7 @@ import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 import com.hmsoft.libcommon.constants.WearMessages;
 import com.hmsoft.libcommon.data.WearSettings;
+import com.hmsoft.libcommon.general.Logger;
 import com.hmsoft.libcommon.general.Utils;
 import com.hmsoft.libcommon.gopro.GoProController;
 import com.hmsoft.libcommon.gopro.GoProStatus;
@@ -49,6 +52,14 @@ import com.hmsoft.weargoproremote.BuildConfig;
 import com.hmsoft.weargoproremote.R;
 import com.hmsoft.weargoproremote.helpers.WifiHelper;
 import com.hmsoft.weargoproremote.services.WearMessageHandlerService;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class MobileMainActivity extends PreferenceActivity implements
         Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener,
@@ -132,9 +143,7 @@ public class MobileMainActivity extends PreferenceActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(BuildConfig.DEBUG) {
-            getMenuInflater().inflate(R.menu.menu_settings, menu);
-        }
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
         return true;
     }
 
@@ -143,18 +152,18 @@ public class MobileMainActivity extends PreferenceActivity implements
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        if(BuildConfig.DEBUG) {
-
-            int id = item.getItemId();
+        int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-            if (id == R.id.action_settings) {
-                /*Intent i = new Intent(this, TestActivity.class);
-                startActivity(i);*/
+        if (id == R.id.action_send_logs) {
+            String currentWifi = WifiHelper.getCurrentWifiName(this);
+            if(currentWifi != null && currentWifi.equals(mWifiNamePref.getText())) {
+                new SendLogsTask(this).execute(mWifiPassPref.getText());
                 return true;
+            } else {
+                Toast.makeText(this, R.string.label_connect_to_gp_wifi, Toast.LENGTH_LONG).show();
             }
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -280,6 +289,67 @@ public class MobileMainActivity extends PreferenceActivity implements
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    private static class SendLogsTask extends AsyncTask<String, Void, String> {
+
+        private Context mContext;
+
+        public SendLogsTask(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            GoProController controller = GoProController.getDefaultInstance(params[0]);
+            GoProController.CameraInfo cameraInfo = controller.getCameraInfo();
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Camera Info:\n");
+            if(cameraInfo != null) cameraInfo.toString(sb);
+            else sb.append("Failed to get camera info.\n");
+
+            // Log the status data of the camera.
+            controller.logCommandAndResponse = true;
+            controller.getRawStatus();
+            controller.logCommandAndResponse = false;
+
+            sb.append("\nLog begins -----------------------------------------------------\n");
+            File logsFolder = Logger.getLogFolder();
+            File[] logFiles = logsFolder.listFiles();
+
+            if(logFiles != null && logFiles.length > 0) {
+                Arrays.sort(logFiles, new Comparator<File>() {
+                    public int compare(File f1, File f2) {
+                        return Long.valueOf(f2.lastModified()).compareTo(f1.lastModified());
+                    }
+                });
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(logFiles[0]));
+                    String line;
+                    while((line = br.readLine()) != null) {
+                        sb.append(line);sb.append(System.lineSeparator());
+                    }
+                } catch (IOException e) {
+                    sb.append("Failed to read last log: ");sb.append(e);sb.append(System.lineSeparator());
+                }
+            } else {
+                sb.append("No logs found.\n");
+            }
+            sb.append("\nLog ends -----------------------------------------------------\n");
+
+            return sb.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String message) {
+            Intent email = new Intent(Intent.ACTION_SEND);
+            email.putExtra(Intent.EXTRA_EMAIL, new String[]{ mContext.getString(R.string.email_support) });
+            email.putExtra(Intent.EXTRA_SUBJECT, "Wear GoPro Remote Logs");
+            email.putExtra(Intent.EXTRA_TEXT, message);
+            email.setType("message/rfc822");
+            mContext.startActivity(Intent.createChooser(email, "Choose an Email client :"));
+        }
     }
 
     private static class TestConnectionTask extends AsyncTask<Object, Void, Boolean> {

@@ -58,13 +58,18 @@ public final class Logger {
         sLogsFolder = context.getExternalFilesDir(LOGS_FOLDER);
     }
 
+    public static File getLogFolder() {
+        if(sLogsFolder == null) {
+            sLogsFolder = new File(Environment.getExternalStorageDirectory() +
+                    "/Android/data/" + BuildConfig.APPLICATION_ID, LOGS_FOLDER);
+        }
+        return sLogsFolder;
+    }
+
     public static void log2file(String tag, String msg, String fileName, Throwable e) {
 
         try {
-            if(sLogsFolder == null) {
-                sLogsFolder = new File(Environment.getExternalStorageDirectory() +
-                        "/Android/data/" + BuildConfig.APPLICATION_ID, LOGS_FOLDER);
-            }
+            getLogFolder();
 
             Date now = new Date();
 

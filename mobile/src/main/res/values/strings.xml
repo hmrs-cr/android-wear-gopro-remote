@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Wear GoPro Remote</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_send_logs">Send logs</string>
     <string name="title_activity_main">GoProController Test</string>
     <string name="action_mode_video">Video</string>
     <string name="action_mode_photo">Photo</string>
@@ -44,6 +44,8 @@
     <string name="preference_watch_preview_enabled_title">Picture Preview</string>
     <string name="status_connection_connected1">Connected</string>
     <string name="status_connection_noconfig">GoPro WiFi and password not configured.</string>
+    <string name="label_connect_to_gp_wifi">Please connect this device to your GoPro WiFi.</string>
+    <string name="email_support" translatable="false">ranametal@users.sf.net</string>
 
     <string-array name="preference_watch_shake_shutter_mode_entries">
         <item>Default</item>
