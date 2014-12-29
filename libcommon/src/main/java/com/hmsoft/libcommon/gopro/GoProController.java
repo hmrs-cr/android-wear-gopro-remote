@@ -17,6 +17,7 @@
 package com.hmsoft.libcommon.gopro;
 
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 
 import com.hmsoft.libcommon.BuildConfig;
@@ -51,12 +52,14 @@ public class GoProController {
 
     private static final byte[] RESPONSE_NOT_FOUND = new byte[0];
 
-    private final String fCameraAddress;
-    private final String fPassword;    
+    private final String mCameraAddress;
+    private final String mPassword;
+
+    public boolean logCommandAndResponse;
 
     public GoProController(String cameraAddress, String password) {
-        fCameraAddress = cameraAddress;
-        fPassword = password;
+        mCameraAddress = cameraAddress;
+        mPassword = password;
     }
 
     public GoProController(String password) {
@@ -64,7 +67,7 @@ public class GoProController {
     }
 
     public static synchronized GoProController getDefaultInstance(String pass) {
-        if(pass == null || sDefaultInstance == null || !pass.equals(sDefaultInstance.fPassword)) {
+        if(pass == null || sDefaultInstance == null || !pass.equals(sDefaultInstance.mPassword)) {
             sDefaultInstance = new GoProController(pass);
         }
         return sDefaultInstance;
@@ -105,7 +108,7 @@ public class GoProController {
     }
 
     private HttpURLConnection getMediaConnection(String command, String param) {
-        String urlStr = "http://" + fCameraAddress + ":8080/gp/" + command;
+        String urlStr = "http://" + mCameraAddress + ":8080/gp/" + command;
         if(param != null) {
             urlStr += "?p=" + param;
         }
@@ -114,7 +117,10 @@ public class GoProController {
     }
 
     private byte[] execCommand(String controller, String command, String param) {
-        String urlStr = "http://" + fCameraAddress + "/" + controller + "/" + command + "?t=" + fPassword;
+        String urlStr = "http://" + mCameraAddress + "/" + controller + "/" + command;
+        if(mPassword != null) {
+           urlStr += "?t=" + mPassword;
+        }
         if (param != null) {
             urlStr += "&p=" + param;
         }
@@ -125,18 +131,31 @@ public class GoProController {
             InputStream in = urlConnection.getInputStream();
             int cl = urlConnection.getContentLength();
             byte[] buffer = new byte[cl];
-            int r = in.read(buffer);
-            if(DEBUG) Logger.debug(TAG, "Command " + urlStr + " executed. " + r);
+            in.read(buffer);
+
+            if(Logger.DEBUG || logCommandAndResponse) logCommandAndResponse(urlStr, buffer);
+
             return buffer;
         } catch (FileNotFoundException e) {
-            Logger.warning(TAG, "Not found: " + urlStr);
+            Logger.warning(TAG, "Not found: " + removePassword(urlStr));
             return RESPONSE_NOT_FOUND;
         } catch (IOException e) {
-            Logger.warning(TAG, "Can't connect to camera", e);
+            Logger.warning(TAG, "Can't connect to camera: " + removePassword(urlStr), e);
             return null;
         } finally {
             urlConnection.disconnect();
         }
+    }
+
+    private String removePassword(String input) {
+        return input.replace(mPassword, "***");
+    }
+
+    private void logCommandAndResponse(String url, byte[] response) {
+        String responseStr = Base64.encodeToString(response, 0,
+                response.length > 512 ? 512 : response.length, Base64.NO_WRAP | Base64.URL_SAFE);
+
+        Logger.info(TAG, removePassword(url) + " = " + responseStr);
     }
 
     private byte[] execCameraCommand(String command, String param) {

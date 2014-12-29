@@ -36,14 +36,14 @@ public final class Logger {
     //private static final String TAG = "Logger";
     private static final String APP_TAG = "HMSOFT:";
 
-    public static final boolean DEBUG = BuildConfig.DEBUG;
+    public static final boolean DEBUG = true;//BuildConfig.DEBUG;
     public static final boolean WARNING = true;
-    //public static final boolean INFO = true;
+    public static final boolean INFO = true;
     public static final boolean ERROR = true;
 
     public static  final String DEBUG_TAG = "DEBUG";
     public static  final String WARNING_TAG = "WARNING";
-    //public static  final String INFO_TAG = "INFO";
+    public static  final String INFO_TAG = "INFO";
     public static  final String ERROR_TAG = "ERROR";
 
     private static final String LOG_FILE = "log-%s.log";
@@ -132,6 +132,13 @@ public final class Logger {
 //		}
 //	}
 
+    public static void warning(String tag, String msg) {
+        if(WARNING) {
+            Log.w(APP_TAG + tag, msg, null);
+            log2file(tag + "\t" + WARNING_TAG, msg, LOG_FILE, null);
+        }
+    }
+
     public static void warning(String tag, String msg, Throwable e) {
         if(WARNING) {
             Log.w(APP_TAG + tag, msg, e);
@@ -148,12 +155,12 @@ public final class Logger {
     }
 
 
-//    public static void info(String tag, String msg) {
-//        if(INFO) {
-//            Log.i(APP_TAG + tag, msg);
-//            log2file(tag + "\t" + INFO_TAG, msg, LOG_FILE, null);
-//        }
-//    }
+    public static void info(String tag, String msg) {
+        if(INFO) {
+            Log.i(APP_TAG + tag, msg);
+            log2file(tag + "\t" + INFO_TAG, msg, LOG_FILE, null);
+        }
+    }
 //
 //    public static void info(String tag, String msg, Object... args) {
 //        if(INFO) {

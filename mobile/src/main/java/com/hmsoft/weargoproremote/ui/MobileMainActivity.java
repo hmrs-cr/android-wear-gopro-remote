@@ -308,6 +308,8 @@ public class MobileMainActivity extends PreferenceActivity implements
                 activity.mGoProController = GoProController.getDefaultInstance(pass);
 
                 instance.mActivity = activity;
+                activity.mWifiNamePref.setEnabled(false);
+                activity.mWifiPassPref.setEnabled(false);
                 instance.execute(pref, ssid, pass);
             }
         }
@@ -321,11 +323,12 @@ public class MobileMainActivity extends PreferenceActivity implements
 
             if(TextUtils.isEmpty(mWifiSSID)) {
                 mWifiSSID = WifiHelper.getCurrentWifiName(mActivity);
+                mNeedUpdateWifiConfig = true;
             }
 
             if(TextUtils.isEmpty(mWifiPass)) {
                 mWifiPass = mActivity.mGoProController.getPassword();
-                mNeedUpdateWifiConfig = !TextUtils.isEmpty(mWifiPass);
+                mNeedUpdateWifiConfig = mNeedUpdateWifiConfig || !TextUtils.isEmpty(mWifiPass);
                 mActivity.mGoProController = GoProController.getDefaultInstance(mWifiPass);
             }
 
@@ -335,6 +338,7 @@ public class MobileMainActivity extends PreferenceActivity implements
                 return false;
             }
 
+            mActivity.mGoProController.logCommandAndResponse = true;
             GoProStatus status;
             int c = 0;
             while((status = mActivity.mGoProController.getStatus() ).CameraMode == GoProStatus.UNKNOW) {
@@ -359,6 +363,8 @@ public class MobileMainActivity extends PreferenceActivity implements
         protected  void onCancelled() {
             super.onCancelled();
             instance = null;
+            mActivity.mWifiNamePref.setEnabled(true);
+            mActivity.mWifiPassPref.setEnabled(true);
         }
 
         @Override
@@ -377,6 +383,7 @@ public class MobileMainActivity extends PreferenceActivity implements
                 preference.setSummary(mActivity.getString(R.string.status_not_connected));
                 //mActivity.mGoProController = null;
             }
+
             if(mNeedUpdateWifiConfig) {
                 mActivity.setWiFiConfig(mWifiSSID, mWifiPass);
                 Intent i = new Intent(mActivity, WearMessageHandlerService.class);
@@ -384,6 +391,10 @@ public class MobileMainActivity extends PreferenceActivity implements
                 i.putExtra(WearMessageHandlerService.EXTRA_MESSAGE, WearMessages.MESSAGE_LAUNCH_ACTIVITY);
                 mActivity.startService(i);
             }
+
+            mActivity.mGoProController.logCommandAndResponse = false;
+            mActivity.mWifiNamePref.setEnabled(true);
+            mActivity.mWifiPassPref.setEnabled(true);
         }
     }
 }
