@@ -33,7 +33,7 @@ Some features are:
 * New icons.
 * Code documentation.
 * Correct battery indicator.
-* ~~Autodetect GoPro WiFi password. ~~ Done!
+* ~~Autodetect GoPro WiFi password.~~ Done!
 * Unit tests.  
 
 ## Thanks to:
