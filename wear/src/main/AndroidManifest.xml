@@ -16,7 +16,8 @@
 
         <activity
             android:name=".ui.WatchMainActivity"
-            android:label="@string/label_launcher" >
+            android:label="@string/label_launcher"
+            android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
