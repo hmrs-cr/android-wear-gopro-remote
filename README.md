@@ -22,7 +22,7 @@ Some features are:
 * Time Lapse interval selector -> http://goo.gl/ualtLs
 * Settings -> http://goo.gl/1IQ4TI
 * Image Gallery -> http://goo.gl/y1I0XM
-* 
+
 [![Video showing it in action](http://img.youtube.com/vi/ek_dwJQX3Wc/0.jpg)](http://www.youtube.com/watch?v=ek_dwJQX3Wc)
 
 ## Things to do
@@ -33,9 +33,10 @@ Some features are:
 * New icons.
 * Code documentation.
 * Correct battery indicator.
-* Autodetect GoPro WiFi password.
+* ~~Autodetect GoPro WiFi password. ~~ Done!
 * Unit tests.  
 
 ## Thanks to:
-* @KonradIT for the great GoPro WiFi documentation at https://github.com/KonradIT/goprowifihack
-* @JMB-Technology-Limited for the shake detector code: https://github.com/JMB-Technology-Limited/Shoogle-For-Yer-Photos-Android/blob/master/app/src/uk/co/jarofgreen/lib/ShakeDetectActivity.java
+* [KonradIT](https://github.com/KonradIT) for the great [GoPro WiFi documentation](https://github.com/KonradIT/goprowifihack).
+* [JMB-Technology-Limited](https://github.com/JMB-Technology-Limited) for the [shake detector](https://github.com/JMB-Technology-Limited/Shoogle-For-Yer-Photos-Android/blob/master/app/src/uk/co/jarofgreen/lib/ShakeDetectActivity.java) code.
+* [passsy](https://github.com/passsy) for his [android-wear-GoPro-Remote](https://github.com/passsy/android-wear-GoPro-Remote) that inspired me to create this app and for the launcher icon.
