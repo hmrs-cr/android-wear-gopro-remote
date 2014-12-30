@@ -36,7 +36,7 @@ public final class Logger {
     //private static final String TAG = "Logger";
     private static final String APP_TAG = "HMSOFT:";
 
-    public static final boolean DEBUG = true;//BuildConfig.DEBUG;
+    public static final boolean DEBUG = BuildConfig.DEBUG;
     public static final boolean WARNING = true;
     public static final boolean INFO = true;
     public static final boolean ERROR = true;
