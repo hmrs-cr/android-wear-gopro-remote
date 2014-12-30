@@ -76,5 +76,6 @@
         <item>9</item>>
     </string-array>
     <string name="status_connection_noconfig">GoPro WiFi y clave no configurados</string>
+    <string name="label_connect_to_gp_wifi">Por favor conecte este dispositivo a la red WiFi de su GoPro</string>
 
 </resources>
