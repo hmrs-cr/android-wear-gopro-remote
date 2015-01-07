@@ -9,4 +9,5 @@
     <string name="preference_watch_shake_level_key">preference_watch_shake_level</string>
     <string name="preference_wifi_test_key">preference_wifi_test</string>
     <string name="preference_wifi_restore_network_key">preference_wifi_restore_network</string>
+    <string name="preference_wifi_autostart_key">preference_wifi_autostart</string>
 </resources>

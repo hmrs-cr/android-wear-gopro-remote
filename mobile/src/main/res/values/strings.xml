@@ -46,6 +46,7 @@
     <string name="status_connection_noconfig">GoPro WiFi and password not configured.</string>
     <string name="label_connect_to_gp_wifi">Please connect this device to your GoPro WiFi.</string>
     <string name="email_support" translatable="false">ranametal@users.sf.net</string>
+    <string name="preference_wifi_autostart_title">Auto start app</string>
 
     <string-array name="preference_watch_shake_shutter_mode_entries">
         <item>Default</item>

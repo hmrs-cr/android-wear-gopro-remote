@@ -27,6 +27,7 @@ import android.preference.PreferenceManager;
 
 import com.hmsoft.libcommon.constants.WearMessages;
 import com.hmsoft.libcommon.general.Logger;
+import com.hmsoft.libcommon.general.Utils;
 import com.hmsoft.weargoproremote.BuildConfig;
 import com.hmsoft.weargoproremote.R;
 
@@ -60,5 +61,13 @@ public class WifiIntentReceiver extends BroadcastReceiver {
                 }
             }
         }
+    }
+
+    public static void disable(Context context) {
+        Utils.disableComponent(context, WifiIntentReceiver.class);
+    }
+
+    public static void enable(Context context) {
+        Utils.enableComponent(context, WifiIntentReceiver.class);
     }
 }

@@ -16,7 +16,9 @@
 
 package com.hmsoft.libcommon.general;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -35,8 +37,24 @@ public class Utils {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
-            Logger.error(TAG, "Awaken from sleep", e);
+            Logger.warning(TAG, "Awaken from sleep", e);
         }
+    }
+
+    public static void disableComponent(Context context, Class<?> componentClass) {
+        PackageManager pm = context.getPackageManager();
+        ComponentName cn = new ComponentName(context, componentClass);
+
+        pm.setComponentEnabledSetting(cn, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+    }
+
+    public static void enableComponent(Context context, Class<?> componentClass) {
+        PackageManager pm = context.getPackageManager();
+        ComponentName cn = new ComponentName(context,  componentClass);
+
+        pm.setComponentEnabledSetting(cn, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
     private Utils() {}

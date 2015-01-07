@@ -42,7 +42,7 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".services.WifiIntentReceiver" >
+        <receiver android:name=".services.WifiIntentReceiver" android:enabled="false" >
             <intent-filter>
                 <action android:name="android.net.wifi.supplicant.STATE_CHANGE" />
             </intent-filter>

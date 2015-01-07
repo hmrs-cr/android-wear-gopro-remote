@@ -22,6 +22,11 @@
             android:title="@string/preference_wifi_restore_network_title"
             android:defaultValue="true"/>
 
+        <CheckBoxPreference
+            android:key="@string/preference_wifi_autostart_key"
+            android:title="@string/preference_wifi_autostart_title"
+            android:defaultValue="false"/>
+
         <Preference
             android:key="@string/preference_wifi_test_key"
             android:title="@string/preference_wifi_test_title"/>

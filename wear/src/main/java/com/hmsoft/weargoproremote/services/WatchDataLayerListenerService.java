@@ -27,6 +27,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 import com.hmsoft.libcommon.general.Logger;
 import com.hmsoft.libcommon.constants.WearMessages;
 import com.hmsoft.libcommon.data.WearSettings;
+import com.hmsoft.libcommon.general.Utils;
 import com.hmsoft.weargoproremote.BuildConfig;
 import com.hmsoft.weargoproremote.ui.WatchMainActivity;
 
@@ -56,19 +57,10 @@ public class WatchDataLayerListenerService extends WearableListenerService  {
     }
 
     public static void disable(Context context) {
-        PackageManager pm = context.getPackageManager();
-        ComponentName cn = new ComponentName(context,  WatchDataLayerListenerService.class);
-
-        pm.setComponentEnabledSetting(cn, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
-
+        Utils.disableComponent(context, WatchDataLayerListenerService.class);
     }
 
     public static void enable(Context context) {
-        PackageManager pm = context.getPackageManager();
-        ComponentName cn = new ComponentName(context,  WatchDataLayerListenerService.class);
-
-        pm.setComponentEnabledSetting(cn, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
+        Utils.enableComponent(context, WatchDataLayerListenerService.class);
     }
 }

@@ -52,10 +52,10 @@ import com.hmsoft.weargoproremote.BuildConfig;
 import com.hmsoft.weargoproremote.R;
 import com.hmsoft.weargoproremote.helpers.WifiHelper;
 import com.hmsoft.weargoproremote.services.WearMessageHandlerService;
+import com.hmsoft.weargoproremote.services.WifiIntentReceiver;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -220,6 +220,15 @@ public class MobileMainActivity extends PreferenceActivity implements
             stringValue = (index >= 0 ? listPreference.getEntries()[index] : "").toString();
         } else if(preference instanceof CheckBoxPreference) {
             boolean checked = Boolean.parseBoolean(stringValue);
+            
+            if(getString(R.string.preference_wifi_autostart_key).equals(preference.getKey())) {
+                if(checked) {
+                    WifiIntentReceiver.enable(this);
+                } else {
+                    WifiIntentReceiver.disable(this);
+                }
+            }
+            
             stringValue = (checked ? getString(R.string.value_enabled) : getString(R.string.value_disabled));
         }
 
