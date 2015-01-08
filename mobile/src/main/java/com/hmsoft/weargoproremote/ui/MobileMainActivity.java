@@ -66,6 +66,8 @@ public class MobileMainActivity extends PreferenceActivity implements
         ShakeDetectEventListener.ShakeDetectActivityListener,
         GoogleApiClient.ConnectionCallbacks {
 
+    static final String TAG = "MobileMainActivity";
+    
     //GoProController mGoProController;
     ShakeDetectEventListener mShakeDetectActivity;
     private GoogleApiClient mGoogleApiClient;
@@ -395,47 +397,52 @@ public class MobileMainActivity extends PreferenceActivity implements
 
         @Override
         protected Boolean doInBackground(Object... params) {
-            preference = (Preference)params[0];
+            try {
+                preference = (Preference) params[0];
 
-            mWifiSSID = params[1].toString();
-            mWifiPass = params[2].toString();
+                mWifiSSID = params[1].toString();
+                mWifiPass = params[2].toString();
 
-            if(TextUtils.isEmpty(mWifiSSID)) {
-                mWifiSSID = WifiHelper.getCurrentWifiName(mActivity);
-                mNeedUpdateWifiConfig = true;
-            }
+                if (TextUtils.isEmpty(mWifiSSID)) {
+                    mWifiSSID = WifiHelper.getCurrentWifiName(mActivity);
+                    mNeedUpdateWifiConfig = true;
+                }
 
-            if(TextUtils.isEmpty(mWifiPass)) {
-                mWifiPass = mActivity.mGoProController.getPassword();
-                mNeedUpdateWifiConfig = mNeedUpdateWifiConfig || !TextUtils.isEmpty(mWifiPass);
-                mActivity.mGoProController = GoProController.getDefaultInstance(mWifiPass);
-            }
+                if (TextUtils.isEmpty(mWifiPass)) {
+                    mWifiPass = mActivity.mGoProController.getPassword();
+                    mNeedUpdateWifiConfig = mNeedUpdateWifiConfig || !TextUtils.isEmpty(mWifiPass);
+                    mActivity.mGoProController = GoProController.getDefaultInstance(mWifiPass);
+                }
 
-            boolean success = WifiHelper.connectToWifi(mActivity, mWifiSSID, mWifiPass);
+                boolean success = WifiHelper.connectToWifi(mActivity, mWifiSSID, mWifiPass);
 
-            if(!success) {
+                if (!success) {
+                    return false;
+                }
+
+                mActivity.mGoProController.logCommandAndResponse = true;
+                GoProStatus status;
+                int c = 0;
+                while ((status = mActivity.mGoProController.getStatus()).CameraMode == GoProStatus.UNKNOW) {
+                    Utils.sleep(1000);
+                    if (++c > 3) {
+                        break;
+                    }
+                }
+
+                if (status.CameraMode == GoProStatus.CAMERA_MODE_OFF_WIFION) {
+                    if (mActivity.mGoProController.turnOn()) {
+                        Utils.sleep(5000);
+                        status = mActivity.mGoProController.getStatus();
+                    }
+                }
+
+                success = status.CameraMode > GoProStatus.UNKNOW;
+                return success;
+            } catch (Exception e) {
+                Logger.error(TAG, "Test Connection failed", e);
                 return false;
             }
-
-            mActivity.mGoProController.logCommandAndResponse = true;
-            GoProStatus status;
-            int c = 0;
-            while((status = mActivity.mGoProController.getStatus() ).CameraMode == GoProStatus.UNKNOW) {
-                Utils.sleep(1000);
-                if(++c > 3) {
-                    break;
-                }
-            }
-
-            if(status.CameraMode == GoProStatus.CAMERA_MODE_OFF_WIFION) {
-                if(mActivity.mGoProController.turnOn()) {
-                    Utils.sleep(5000);
-                    status = mActivity.mGoProController.getStatus();
-                }
-            }
-
-            success = status.CameraMode > GoProStatus.UNKNOW;            
-            return success;
         }
 
         @Override
