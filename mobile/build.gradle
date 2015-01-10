@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 def versionMajor = 1
 def versionMinor = 0
-def verCode = 11;
+def verCode = 12;
 
 def buildTime() {
     def date = new Date()
