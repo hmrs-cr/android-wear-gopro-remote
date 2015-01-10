@@ -77,5 +77,14 @@
     </string-array>
     <string name="status_connection_noconfig">GoPro WiFi y clave no configurados</string>
     <string name="label_connect_to_gp_wifi">Por favor conecte este dispositivo a la red WiFi de su GoPro</string>
+    <string name="toast_wifi_configured">¡Wear GoPro Remote configurado correctamente!</string>
+    <string name="status_no_wearable_node">No se puede encontrar dispositivo "wearable"</string>
+    <string name="status_googleapi_error">No se pudo conectar al servicio de Google API</string>
+    <string name="setup_dialog_title">Configuración</string>
+    <string name="setup_dialog_setup_button">Configurar</string>
+    <string name="setup_dialog_open_wifi_settings_button">Ajustes WiFi</string>
+    <string name="setup_dialog_message">Los ajustes WiFi de esta aplicación no están configurados. Por favor conecte este dispositivo a la red WiFi de su GoPro.\n\nSi este dispositivo está conectado a su GoPro por favor presione \'Configurar\' de lo contrario presione \'Ajustes WiFi\' y conecte este dispositivo a su GoPro WiFi.</string>
+    <string name="setup_dialog_manual_config_button">Config. manual</string>
+    <string name="preference_wifi_autostart_title">Autoiniciar App</string>
 
 </resources>
