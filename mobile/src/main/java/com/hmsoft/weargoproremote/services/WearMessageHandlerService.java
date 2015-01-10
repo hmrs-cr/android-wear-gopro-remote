@@ -244,11 +244,13 @@ public class WearMessageHandlerService extends Service
     private void sendToWearable(String path, byte[] data) {
 
         if(!connectGoogleApiClient()) {
+            updateNotification(getString(R.string.status_googleapi_error));
             Logger.error(TAG, "Failed to connect GoogleApiClient");
             return;
         }
 
         if(!findWearableNode()) {
+            updateNotification(getString(R.string.status_no_wearable_node));
             Logger.error(TAG, "Failed to find wearable node");
             return;
         }

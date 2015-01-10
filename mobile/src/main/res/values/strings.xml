@@ -47,6 +47,17 @@
     <string name="label_connect_to_gp_wifi">Please connect this device to your GoPro WiFi.</string>
     <string name="email_support" translatable="false">ranametal@users.sf.net</string>
     <string name="preference_wifi_autostart_title">Auto start app</string>
+    <string name="status_googleapi_error">Can\'t connect to Google API Service.</string>
+    <string name="status_no_wearable_node">Can\'t find wearable device.</string>
+    <string name="setup_dialog_message">
+        GoPro WiFi settings are not configured. Please connect this device to your GoPro WiFi network.\n\n
+        
+        If this device is connected to your GoPro please press <b>\'Setup now\'</b> otherwise press <b>Open WiFi settings</b> and connected this device to yor GoPro network.
+    </string>
+    <string name="toast_wifi_configured">Wear GoPro Remote WiFi settings configured successfully!</string>
+    <string name="setup_dialog_title">Setup</string>
+    <string name="setup_dialog_setup_button">Setup now</string>
+    <string name="setup_dialog_open_wifi_settings_button">Open WiFi settings</string>
 
     <string-array name="preference_watch_shake_shutter_mode_entries">
         <item>Default</item>

@@ -31,6 +31,19 @@ public class WifiHelper {
     private static final String TAG = "WifiHelper";
     private WifiHelper() {}
 
+    public static void turnWifiOn(Context context, long waitTime) {
+        final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        
+        if(wifiManager == null) {
+            return ;
+        }
+        
+        if(!wifiManager.isWifiEnabled()) {
+            wifiManager.setWifiEnabled(true);
+            if(waitTime > 0) Utils.sleep(waitTime);
+        }
+    }
+    
     public static  String getCurrentWifiName(Context context) {
         final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         if(wifiManager == null) {

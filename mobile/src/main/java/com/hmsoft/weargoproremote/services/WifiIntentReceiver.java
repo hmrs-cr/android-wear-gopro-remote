@@ -35,6 +35,20 @@ public class WifiIntentReceiver extends BroadcastReceiver {
 
     private static final String TAG = "WifiIntentReceiver";
 
+    protected Context mContext; 
+    
+    protected void onWiFiConnected(String ssid) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String ssidc = prefs.getString(mContext.getString(R.string.preference_wifi_name_key), "");
+        if (("\"" + ssidc  + "\"").equals(ssid)) {
+            Intent i = new Intent(mContext, WearMessageHandlerService.class);
+            i.setAction(WearMessageHandlerService.ACTION_SEND_MESSAGE_TO_WEAR);
+            i.putExtra(WearMessageHandlerService.EXTRA_MESSAGE,
+                    WearMessages.MESSAGE_LAUNCH_ACTIVITY);
+            mContext.startService(i);
+        }
+    }
+    
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -48,15 +62,8 @@ public class WifiIntentReceiver extends BroadcastReceiver {
                 if(wifiManager != null) {
                     WifiInfo info = wifiManager.getConnectionInfo();
                     if (info != null) {
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                        String ssid = prefs.getString(context.getString(R.string.preference_wifi_name_key), "");
-                        if (("\"" + ssid  + "\"").equals(info.getSSID())) {
-                            Intent i = new Intent(context, WearMessageHandlerService.class);
-                            i.setAction(WearMessageHandlerService.ACTION_SEND_MESSAGE_TO_WEAR);
-                            i.putExtra(WearMessageHandlerService.EXTRA_MESSAGE,
-                                    WearMessages.MESSAGE_LAUNCH_ACTIVITY);
-                            context.startService(i);
-                        }
+                        mContext = context;
+                        onWiFiConnected(info.getSSID());
                     }
                 }
             }
