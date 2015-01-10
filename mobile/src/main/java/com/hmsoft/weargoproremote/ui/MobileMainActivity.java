@@ -247,7 +247,7 @@ public class MobileMainActivity extends PreferenceActivity implements
             connectGoogleApiClient();
 
             if(mShakeDetectActivity != null && preference.getKey().equals(getString(com.hmsoft.libcommon.R.string.preference_watch_shake_level_key))) {
-                mShakeDetectActivity.setMinimumEachDirection(Integer.parseInt(value.toString()));
+                mShakeDetectActivity.setMinimumEachDirection(Integer.parseInt(value != null ? value.toString() : "0"));
             }
         }
 
