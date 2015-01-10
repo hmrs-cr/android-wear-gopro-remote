@@ -83,6 +83,7 @@ public class MobileMainActivity extends PreferenceActivity implements
     private WearSettings fCurrentWearSettings;
     AlertDialog mSetupDialog;
     BroadcastReceiver mWifiIntentReceiver;
+    int mSetupDialogShowCount;
     EditTextPreference mWifiNamePref;
     EditTextPreference mWifiPassPref;
     GoProController mGoProController;
@@ -317,6 +318,10 @@ public class MobileMainActivity extends PreferenceActivity implements
                         }
                     });
 
+            if(++mSetupDialogShowCount > 2) {
+                builder.setNegativeButton(R.string.setup_dialog_manual_config_button, null);
+            }
+            
             // 3. Get the AlertDialog from create()
             mSetupDialog = builder.show();
             

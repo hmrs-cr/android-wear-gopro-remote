@@ -52,12 +52,15 @@
     <string name="setup_dialog_message">
         GoPro WiFi settings are not configured. Please connect this device to your GoPro WiFi network.\n\n
         
-        If this device is connected to your GoPro please press <b>\'Setup now\'</b> otherwise press <b>Open WiFi settings</b> and connected this device to yor GoPro network.
+        If this device is connected to your GoPro please press <b>\'Setup now\'</b> otherwise press <b>\'WiFi settings\'
+    
+    </b> and connected this device to yor GoPro network.
     </string>
     <string name="toast_wifi_configured">Wear GoPro Remote WiFi settings configured successfully!</string>
     <string name="setup_dialog_title">Setup</string>
     <string name="setup_dialog_setup_button">Setup now</string>
-    <string name="setup_dialog_open_wifi_settings_button">Open WiFi settings</string>
+    <string name="setup_dialog_open_wifi_settings_button">WiFi settings</string>
+    <string name="setup_dialog_manual_config_button">Manual Config</string>
 
     <string-array name="preference_watch_shake_shutter_mode_entries">
         <item>Default</item>
