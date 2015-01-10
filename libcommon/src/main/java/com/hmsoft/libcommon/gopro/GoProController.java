@@ -148,7 +148,11 @@ public class GoProController {
     }
 
     private String removePassword(String input) {
-        return input.replace(mPassword, "***");
+        if(input != null && mPassword != null && !mPassword.trim().equals("")) {
+            return input.replace(mPassword, "***");
+        } else {
+            return input;
+        }
     }
 
     private void logCommandAndResponse(String url, byte[] response) {
