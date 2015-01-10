@@ -49,12 +49,11 @@
     <string name="preference_wifi_autostart_title">Auto start app</string>
     <string name="status_googleapi_error">Can\'t connect to Google API Service.</string>
     <string name="status_no_wearable_node">Can\'t find wearable device.</string>
-    <string name="setup_dialog_message">
-        GoPro WiFi settings are not configured. Please connect this device to your GoPro WiFi network.\n\n
+    <string name="setup_dialog_message">GoPro WiFi settings are not configured. Please connect this device to your GoPro WiFi network.\n\n
         
         If this device is connected to your GoPro please press <b>\'Setup now\'</b> otherwise press <b>\'WiFi settings\'
     
-    </b> and connected this device to yor GoPro network.
+    </b> and connect this device to yor GoPro network.
     </string>
     <string name="toast_wifi_configured">Wear GoPro Remote WiFi settings configured successfully!</string>
     <string name="setup_dialog_title">Setup</string>
